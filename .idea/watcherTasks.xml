@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="--single-quote --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
-      <option name="fileExtension" value="js" />
+      <option name="fileExtension" value="*" />
       <option name="immediateSync" value="false" />
       <option name="name" value="Prettier" />
       <option name="output" value="$FilePathRelativeToProjectRoot$" />
