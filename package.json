@@ -14,6 +14,7 @@
     ]
   },
   "scripts": {
+    "analyze": "source-map-explorer build/static/js/main.*",
     "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -40,7 +41,9 @@
     "eslint-plugin-prettier": "^2.6.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",
-    "prettier": "^1.13.6"
+    "prettier": "^1.13.6",
+    "prop-types": "*",
+    "source-map-explorer": "^1.5.0"
   },
   "eslintConfig": {
     "extends": [
