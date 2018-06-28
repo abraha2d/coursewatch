@@ -2,29 +2,28 @@
   "name": "coursewatch",
   "version": "0.1.0",
   "homepage": "https://abraha2d.github.io/coursewatch",
+  "bugs": "https://github.com/abraha2d/coursewatch/issues",
+  "license": "UNLICENSED",
   "private": true,
-  "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": [
-      "prettier --single-quote --write",
-      "git add"
-    ]
-  },
+  "author": "Kevin Abraham <kev@gatech.edu>",
+  "repository": "github:abraha2d/coursewatch",
   "scripts": {
-    "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
-    "analyze": "source-map-explorer build/static/js/main.*",
-    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "precommit": "lint-staged",
+    "analyze": "source-map-explorer build/static/js/main.*",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
+  },
+  "dependencies": {
+    "prop-types": "*",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.8",
@@ -46,12 +45,17 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",
     "prettier": "^1.13.6",
-    "prop-types": "*",
     "source-map-explorer": "^1.5.0"
   },
   "eslintConfig": {
     "extends": [
       "plugin:prettier/recommended"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier --single-quote --write",
+      "git add"
     ]
   }
 }
