@@ -12,6 +12,12 @@ import {
 } from '@material-ui/core';
 
 const styles = theme => ({
+  headerImage: {
+    width: '5em',
+    height: '5em',
+    display: 'block',
+    margin: 'auto'
+  },
   loginButton: {
     margin: theme.spacing.unit
   }
@@ -43,7 +49,11 @@ class LoginDialog extends React.Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">
-          <img src="/static/images/logo.png" />
+          <img
+            className={this.props.classes.headerImage}
+            src="/static/images/logo.png"
+            alt="Coursewatch Login"
+          />
         </DialogTitle>
         <DialogContent>
           <TextField
