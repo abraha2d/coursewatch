@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-import './index.css';
+
 import App from 'containers/App';
 import configureStore from './configureStore';
 import registerServiceWorker from './registerServiceWorker';
+
+import { CssBaseline } from '@material-ui/core';
 
 // Create redux store with history
 const initialState = {};
@@ -16,7 +18,9 @@ const store = configureStore(initialState, history);
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />
+      <CssBaseline>
+        <App />
+      </CssBaseline>
     </ConnectedRouter>
   </Provider>,
   document.getElementById('root')

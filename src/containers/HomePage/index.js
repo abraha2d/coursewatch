@@ -10,10 +10,11 @@
  */
 
 import React from 'react';
+import LoginDialog from 'components/LoginDialog';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
   render() {
-    return <h1>This is HomePage component!</h1>;
+    return <LoginDialog />;
   }
 }
