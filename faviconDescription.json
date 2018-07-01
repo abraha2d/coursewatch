@@ -1,0 +1,64 @@
+
+{
+	"masterPicture": "web_hi_res_512_cropped.png",
+	"iconsPath": "/",
+	"design": {
+		"ios": {
+			"pictureAspect": "noChange",
+			"assets": {
+				"ios6AndPriorIcons": false,
+				"ios7AndLaterIcons": false,
+				"precomposedIcons": false,
+				"declareOnlyDefaultIcon": true
+			}
+		},
+		"desktopBrowser": {},
+		"windows": {
+			"pictureAspect": "noChange",
+			"backgroundColor": "#1976d2",
+			"onConflict": "override",
+			"assets": {
+				"windows80Ie10Tile": false,
+				"windows10Ie11EdgeTiles": {
+					"small": false,
+					"medium": true,
+					"big": false,
+					"rectangle": false
+				}
+			}
+		},
+		"androidChrome": {
+			"pictureAspect": "noChange",
+			"themeColor": "#1976d2",
+			"manifest": {
+				"name": "Coursewatch",
+				"startUrl": "./index.html",
+				"display": "standalone",
+				"orientation": "notSet",
+				"onConflict": "override",
+				"declared": true
+			},
+			"assets": {
+				"legacyIcon": false,
+				"lowResolutionIcons": false
+			}
+		},
+		"safariPinnedTab": {
+			"pictureAspect": "blackAndWhite",
+			"threshold": 65.625,
+			"themeColor": "#1976d2"
+		}
+	},
+	"settings": {
+		"compression": 3,
+		"scalingAlgorithm": "Mitchell",
+		"errorOnImageTooSmall": false,
+		"readmeFile": true,
+		"htmlCodeFile": true,
+		"usePathAsIs": false
+	},
+	"versioning": {
+		"paramName": "v",
+		"paramValue": "E6j9W7gNlx"
+	}
+}
