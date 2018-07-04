@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import GoogleLogin from 'react-google-login';
+
 import {
   Button,
   Dialog,
@@ -79,6 +82,7 @@ class LoginDialog extends React.Component {
             value={this.state.password}
             onChange={this.handleChange('password')}
           />
+          <GoogleLogin clientId="988780152592-ccs5v79t0vuhvd0t1fhko53ugfmpheo1.apps.googleusercontent.com" />
         </DialogContent>
         <DialogActions>
           <Button>Forgot Password?</Button>
