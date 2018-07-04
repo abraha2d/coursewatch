@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 
 import App from 'containers/App';
@@ -12,7 +12,9 @@ import { CssBaseline } from '@material-ui/core';
 
 // Create redux store with history
 const initialState = {};
-const history = createHistory();
+const history = createHistory({
+  basename: '/coursewatch/'
+});
 const store = configureStore(initialState, history);
 
 ReactDOM.render(
