@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import GoogleLogin from 'react-google-login';
 
+import logo from 'images/logo.png';
+
 import {
   Button,
   Dialog,
@@ -54,7 +56,7 @@ class LoginDialog extends React.Component {
         <DialogTitle id="form-dialog-title">
           <img
             className={this.props.classes.headerImage}
-            src="/static/images/logo.png"
+            src={logo}
             alt="Coursewatch Login"
           />
         </DialogTitle>
