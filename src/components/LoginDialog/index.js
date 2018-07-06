@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import GoogleLogin from 'react-google-login';
-
 import logo from 'images/logo.png';
 
 import {
@@ -25,6 +23,17 @@ const styles = theme => ({
   },
   loginButton: {
     margin: theme.spacing.unit
+  },
+  googleLogin: {
+    margin: 3 * theme.spacing.unit,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  orSpan: {
+    fontFamily: 'Roboto',
+    textAlign: 'center',
+    marginTop: 2 * theme.spacing.unit
   }
 });
 
@@ -84,7 +93,11 @@ class LoginDialog extends React.Component {
             value={this.state.password}
             onChange={this.handleChange('password')}
           />
-          <GoogleLogin clientId="988780152592-ccs5v79t0vuhvd0t1fhko53ugfmpheo1.apps.googleusercontent.com" />
+          <div className={this.props.classes.orSpan}>– or –</div>
+          <div
+            className={`g-signin2 ${this.props.classes.googleLogin}`}
+            data-onsuccess="onSignIn"
+          />
         </DialogContent>
         <DialogActions>
           <Button>Forgot Password?</Button>
