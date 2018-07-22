@@ -50,6 +50,14 @@ class LoginDialog extends React.Component {
     };
   }
 
+  componentWillMount() {
+    window['onSignIn'] = this.handleGSubmit;
+  }
+
+  componentWillUnmount() {
+    delete window['onSignIn'];
+  }
+
   handleChange(name) {
     return event => {
       this.setState({
@@ -79,6 +87,28 @@ class LoginDialog extends React.Component {
         this.setState({ error: true });
         console.error(error);
       });
+  };
+
+  handleGSubmit = (googleUser, ...rest) => {
+    console.log(googleUser, rest);
+    // axios
+    //   .post(
+    //     '/api/auth',
+    //     {
+    //       access_token: process.env.REACT_APP_API_MASTER_KEY
+    //     },
+    //     {
+    //       auth: { username: this.state.username, password: this.state.password }
+    //     }
+    //   )
+    //   .then(response => {
+    //     this.setState({ showLoginMessage: true });
+    //     console.log(response);
+    //   })
+    //   .catch(error => {
+    //     this.setState({ error: true });
+    //     console.error(error);
+    //   });
   };
 
   render() {
