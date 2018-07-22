@@ -70,5 +70,13 @@
       "prettier --single-quote --write",
       "git add"
     ]
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:9000",
+      "pathRewrite": {
+        "^/api": "/"
+      }
+    }
   }
 }
