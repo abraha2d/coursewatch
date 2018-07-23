@@ -63,7 +63,8 @@
   "eslintConfig": {
     "extends": [
       "plugin:prettier/recommended"
-    ]
+    ],
+    "parser": "babel-eslint"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
