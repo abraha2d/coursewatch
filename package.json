@@ -38,7 +38,9 @@
     "redux": "^4.0.0",
     "redux-immutable": "^4.0.0",
     "redux-saga": "^0.16.0",
-    "reselect": "^3.0.1"
+    "reselect": "^3.0.1",
+    "lodash": "latest",
+    "invariant": "latest"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.8",
