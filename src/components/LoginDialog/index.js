@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Snackbar,
   TextField,
   withMobileDialog,
   withStyles
@@ -45,17 +44,16 @@ class LoginDialog extends React.Component {
     this.state = {
       username: "",
       password: "",
-      error: false,
-      showLoginMessage: false
+      error: false
     };
   }
 
   componentWillMount() {
-    window["onSignIn"] = this.handleGoogleSignIn;
+    window["handleGoogleSignIn"] = this.handleGoogleSignIn;
   }
 
   componentWillUnmount() {
-    delete window["onSignIn"];
+    delete window["handleGoogleSignIn"];
   }
 
   handleChange(name) {
@@ -67,119 +65,102 @@ class LoginDialog extends React.Component {
     };
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
+  auth = (apiURL, access_token, sendAuth) =>
     axios
       .post(
-        "/api/auth",
-        {
-          access_token: process.env.REACT_APP_API_MASTER_KEY
-        },
-        {
-          auth: { username: this.state.username, password: this.state.password }
-        }
+        apiURL,
+        { access_token: access_token },
+        sendAuth
+          ? {
+              auth: {
+                username: this.state.username,
+                password: this.state.password
+              }
+            }
+          : {}
       )
       .then(response => {
-        this.setState({ showLoginMessage: true });
-        console.log(response.data.token);
+        this.props.onLogin(response.data.token);
       })
-      .catch(error => {
-        this.setState({ error: true });
-        console.error(error);
-      });
+      .catch(error => this.setState({ error }));
+
+  handleSignIn = event => {
+    event.preventDefault();
+    this.auth("/api/auth", this.props.apiAccessToken, true);
   };
 
   handleGoogleSignIn = googleUser => {
-    axios
-      .post("/api/auth/google", {
-        access_token: googleUser.getAuthResponse().id_token
-      })
-      .then(response => {
-        this.setState({ showLoginMessage: true });
-        console.log(response.data.token);
-      })
-      .catch(error => {
-        this.setState({ error: true });
-        console.error(error);
-      });
+    this.auth("/api/auth/google", googleUser.getAuthResponse().id_token, true);
   };
 
   render() {
     return (
-      <div>
-        <Dialog
-          open
-          fullScreen={this.props.fullScreen}
-          aria-labelledby="form-dialog-title"
-        >
-          <form onSubmit={this.handleSubmit}>
-            <DialogTitle id="form-dialog-title">
-              <img
-                className={this.props.classes.headerImage}
-                src={logo}
-                alt="Coursewatch Login"
-              />
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                id="username"
-                label="Username"
-                type="username"
-                autoComplete="username"
-                required
-                autoFocus
-                fullWidth
-                margin="dense"
-                value={this.state.username}
-                onChange={this.handleChange("username")}
-                error={this.state.error}
-              />
-              <TextField
-                id="password"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                required
-                fullWidth
-                margin="dense"
-                value={this.state.password}
-                onChange={this.handleChange("password")}
-                error={this.state.error}
-              />
-              <div className={this.props.classes.orSpan}>– or –</div>
-              <div
-                className={`g-signin2 ${this.props.classes.googleLogin}`}
-                data-onsuccess="onSignIn"
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button>Forgot Password?</Button>
-              <Button
-                className={this.props.classes.loginButton}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Login
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right"
-          }}
-          open={this.state.showLoginMessage}
-          message="Authentication successful!"
-        />
-      </div>
+      <Dialog
+        open
+        fullScreen={this.props.fullScreen}
+        aria-labelledby="form-dialog-title"
+      >
+        <form onSubmit={this.handleSignIn}>
+          <DialogTitle id="form-dialog-title">
+            <img
+              className={this.props.classes.headerImage}
+              src={logo}
+              alt="Coursewatch Login"
+            />
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              id="username"
+              label="Username"
+              type="username"
+              autoComplete="username"
+              required
+              autoFocus
+              fullWidth
+              margin="dense"
+              value={this.state.username}
+              onChange={this.handleChange("username")}
+              error={this.state.error !== false}
+            />
+            <TextField
+              id="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              required
+              fullWidth
+              margin="dense"
+              value={this.state.password}
+              onChange={this.handleChange("password")}
+              error={this.state.error !== false}
+            />
+            <div className={this.props.classes.orSpan}>– or –</div>
+            <div
+              className={`g-signin2 ${this.props.classes.googleLogin}`}
+              data-onsuccess="handleGoogleSignIn"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button>Forgot Password?</Button>
+            <Button
+              className={this.props.classes.loginButton}
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              Login
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     );
   }
 }
 
 LoginDialog.propTypes = {
-  fullScreen: PropTypes.bool
+  fullScreen: PropTypes.bool,
+  apiAccessToken: PropTypes.string,
+  onLogin: PropTypes.func
 };
 
 export default withStyles(styles)(withMobileDialog()(LoginDialog));
