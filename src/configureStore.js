@@ -4,7 +4,10 @@
 
 import { createStore, applyMiddleware, compose } from "redux";
 import { fromJS } from "immutable";
-import { routerMiddleware } from "connected-react-router";
+import {
+  connectRouter,
+  routerMiddleware
+} from "connected-react-router/immutable";
 import createSagaMiddleware from "redux-saga";
 import createReducer from "./reducers";
 
@@ -33,7 +36,7 @@ export default function configureStore(initialState = {}, history) {
   /* eslint-enable */
 
   const store = createStore(
-    createReducer(),
+    connectRouter(history)(createReducer()),
     fromJS(initialState),
     composeEnhancers(...enhancers)
   );

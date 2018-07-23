@@ -4,7 +4,7 @@
 
 import { combineReducers } from "redux-immutable";
 import { fromJS } from "immutable";
-import { LOCATION_CHANGE } from "connected-react-router";
+import { LOCATION_CHANGE } from "connected-react-router/immutable";
 
 /*
  * routeReducer
