@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { compose } from "redux";
+import { push } from "connected-react-router/immutable";
 
 import injectReducer from "utils/injectReducer";
 import makeSelectAuth from "./selectors";
@@ -21,6 +22,7 @@ import { setToken } from "./actions";
 export class LoginPage extends React.PureComponent {
   handleLogin = token => {
     this.props.dispatch(setToken(token));
+    this.props.dispatch(push(this.props.location.state.from));
   };
 
   render() {
