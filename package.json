@@ -15,6 +15,7 @@
     "generate": "plop --plopfile internals/generators/index.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
+    "prettify": "prettier --write",
     "precommit": "lint-staged",
     "analyze": "source-map-explorer build/static/js/main.*",
     "predeploy": "yarn build",
