@@ -1,21 +1,21 @@
 /*
  *
- * LoginPage reducer
+ * Auth reducer
  *
  */
 
 import { fromJS } from "immutable";
-import { DEFAULT_ACTION } from "./constants";
+import { SET_TOKEN } from "./constants";
 
 export const initialState = fromJS({});
 
-function loginPageReducer(state = initialState, action) {
+function authReducer(state = initialState, action) {
   switch (action.type) {
-    case DEFAULT_ACTION:
-      return state;
+    case SET_TOKEN:
+      return state.set("token", action.token);
     default:
       return state;
   }
 }
 
-export default loginPageReducer;
+export default authReducer;

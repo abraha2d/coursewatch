@@ -11,16 +11,14 @@ import { createStructuredSelector } from "reselect";
 import { compose } from "redux";
 import { Redirect, Route } from "react-router-dom";
 
-import injectReducer from "utils/injectReducer";
-import makeSelectSecuredRoute from "./selectors";
-import reducer from "./reducer";
+import makeSelectAuth from "../LoginPage/selectors";
 
-function SecuredRoute({ component: Component, ...rest }) {
+function SecuredRoute({ component: Component, Auth, ...rest }) {
   return (
     <Route
       {...rest}
       render={props =>
-        false ? (
+        Auth.token ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -40,7 +38,7 @@ SecuredRoute.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  securedroute: makeSelectSecuredRoute()
+  Auth: makeSelectAuth()
 });
 
 function mapDispatchToProps(dispatch) {
@@ -54,9 +52,4 @@ const withConnect = connect(
   mapDispatchToProps
 );
 
-const withReducer = injectReducer({ key: "securedroute", reducer });
-
-export default compose(
-  withReducer,
-  withConnect
-)(SecuredRoute);
+export default compose(withConnect)(SecuredRoute);

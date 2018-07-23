@@ -1,13 +1,14 @@
 /*
  *
- * LoginPage actions
+ * Auth actions
  *
  */
 
-import { DEFAULT_ACTION } from "./constants";
+import { SET_TOKEN } from "./constants";
 
-export function defaultAction() {
+export function setToken(token) {
   return {
-    type: DEFAULT_ACTION
+    type: SET_TOKEN,
+    token
   };
 }

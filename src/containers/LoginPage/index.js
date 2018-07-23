@@ -11,14 +11,16 @@ import { createStructuredSelector } from "reselect";
 import { compose } from "redux";
 
 import injectReducer from "utils/injectReducer";
-import makeSelectLoginPage from "./selectors";
+import makeSelectAuth from "./selectors";
 import reducer from "./reducer";
-import LoginDialog from "../../components/LoginDialog";
+
+import LoginDialog from "components/LoginDialog";
+import { setToken } from "./actions";
 
 /* eslint-disable react/prefer-stateless-function */
 export class LoginPage extends React.PureComponent {
   handleLogin = token => {
-    console.log(token);
+    this.props.dispatch(setToken(token));
   };
 
   render() {
@@ -36,7 +38,7 @@ LoginPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  loginpage: makeSelectLoginPage()
+  Auth: makeSelectAuth()
 });
 
 function mapDispatchToProps(dispatch) {
@@ -50,7 +52,7 @@ const withConnect = connect(
   mapDispatchToProps
 );
 
-const withReducer = injectReducer({ key: "loginPage", reducer });
+const withReducer = injectReducer({ key: "auth", reducer });
 
 export default compose(
   withReducer,

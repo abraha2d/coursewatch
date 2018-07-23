@@ -5,7 +5,7 @@ import { initialState } from "./reducer";
  * Direct selector to the loginPage state domain
  */
 
-const selectLoginPageDomain = state => state.get("loginPage", initialState);
+const selectAuthDomain = state => state.get("auth", initialState);
 
 /**
  * Other specific selectors
@@ -15,8 +15,8 @@ const selectLoginPageDomain = state => state.get("loginPage", initialState);
  * Default selector used by LoginPage
  */
 
-const makeSelectLoginPage = () =>
-  createSelector(selectLoginPageDomain, substate => substate.toJS());
+const makeSelectAuth = () =>
+  createSelector(selectAuthDomain, substate => substate.toJS());
 
-export default makeSelectLoginPage;
-export { selectLoginPageDomain };
+export default makeSelectAuth;
+export { selectAuthDomain };
