@@ -1,6 +1,6 @@
-import { configure } from '@storybook/react';
-import { setOptions } from '@storybook/addon-options';
-import '@storybook/addon-console';
+import { configure } from "@storybook/react";
+import { setOptions } from "@storybook/addon-options";
+import "@storybook/addon-console";
 
 // Option defaults:
 setOptions({
@@ -8,12 +8,12 @@ setOptions({
    * name to display in the top left corner
    * @type {String}
    */
-  name: 'Coursewatch',
+  name: "Coursewatch",
   /**
    * URL for name in top left corner to link to
    * @type {String}
    */
-  url: '#',
+  url: "#",
   /**
    * show story component as full screen
    * @type {Boolean}
@@ -75,7 +75,7 @@ setOptions({
 });
 
 function loadStories() {
-  require('../src/stories');
+  require("../src/stories");
 }
 
 configure(loadStories, module);
