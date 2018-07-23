@@ -89,26 +89,20 @@ class LoginDialog extends React.Component {
       });
   };
 
-  handleGSubmit = (googleUser, ...rest) => {
-    console.log(googleUser, rest);
-    // axios
-    //   .post(
-    //     '/api/auth',
-    //     {
-    //       access_token: process.env.REACT_APP_API_MASTER_KEY
-    //     },
-    //     {
-    //       auth: { username: this.state.username, password: this.state.password }
-    //     }
-    //   )
-    //   .then(response => {
-    //     this.setState({ showLoginMessage: true });
-    //     console.log(response);
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error: true });
-    //     console.error(error);
-    //   });
+  handleGSubmit = googleUser => {
+    console.log(googleUser.getAuthResponse().id_token);
+    axios
+      .post('/api/auth/google', {
+        access_token: googleUser.getAuthResponse().id_token
+      })
+      .then(response => {
+        this.setState({ showLoginMessage: true });
+        console.log(response);
+      })
+      .catch(error => {
+        this.setState({ error: true });
+        console.error(error);
+      });
   };
 
   render() {
