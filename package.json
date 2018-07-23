@@ -12,6 +12,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "generate": "plop --plopfile internals/generators/index.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "precommit": "lint-staged",
@@ -57,6 +58,7 @@
     "gh-pages": "^1.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",
+    "plop": "^2.0.0",
     "prettier": "^1.13.6",
     "source-map-explorer": "^1.5.0"
   },
