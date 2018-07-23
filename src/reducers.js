@@ -2,9 +2,9 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
-import { combineReducers } from 'redux-immutable';
-import { fromJS } from 'immutable';
-import { LOCATION_CHANGE } from 'connected-react-router';
+import { combineReducers } from "redux-immutable";
+import { fromJS } from "immutable";
+import { LOCATION_CHANGE } from "connected-react-router";
 
 /*
  * routeReducer

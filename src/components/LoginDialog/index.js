@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
+import React from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
 
-import logo from 'images/logo.png';
+import logo from "images/logo.png";
 
 import {
   Button,
@@ -14,27 +14,27 @@ import {
   TextField,
   withMobileDialog,
   withStyles
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const styles = theme => ({
   headerImage: {
-    width: '5em',
-    height: '5em',
-    display: 'block',
-    margin: 'auto'
+    width: "5em",
+    height: "5em",
+    display: "block",
+    margin: "auto"
   },
   loginButton: {
     margin: theme.spacing.unit
   },
   googleLogin: {
     margin: 3 * theme.spacing.unit,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   orSpan: {
-    fontFamily: 'Roboto',
-    textAlign: 'center',
+    fontFamily: "Roboto",
+    textAlign: "center",
     marginTop: 2 * theme.spacing.unit
   }
 });
@@ -43,19 +43,19 @@ class LoginDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       error: false,
       showLoginMessage: false
     };
   }
 
   componentWillMount() {
-    window['onSignIn'] = this.handleGSubmit;
+    window["onSignIn"] = this.handleGoogleSignIn;
   }
 
   componentWillUnmount() {
-    delete window['onSignIn'];
+    delete window["onSignIn"];
   }
 
   handleChange(name) {
@@ -71,7 +71,7 @@ class LoginDialog extends React.Component {
     event.preventDefault();
     axios
       .post(
-        '/api/auth',
+        "/api/auth",
         {
           access_token: process.env.REACT_APP_API_MASTER_KEY
         },
@@ -81,7 +81,7 @@ class LoginDialog extends React.Component {
       )
       .then(response => {
         this.setState({ showLoginMessage: true });
-        console.log(response);
+        console.log(response.data.token);
       })
       .catch(error => {
         this.setState({ error: true });
@@ -89,15 +89,14 @@ class LoginDialog extends React.Component {
       });
   };
 
-  handleGSubmit = googleUser => {
-    console.log(googleUser.getAuthResponse().id_token);
+  handleGoogleSignIn = googleUser => {
     axios
-      .post('/api/auth/google', {
+      .post("/api/auth/google", {
         access_token: googleUser.getAuthResponse().id_token
       })
       .then(response => {
         this.setState({ showLoginMessage: true });
-        console.log(response);
+        console.log(response.data.token);
       })
       .catch(error => {
         this.setState({ error: true });
@@ -132,7 +131,7 @@ class LoginDialog extends React.Component {
                 fullWidth
                 margin="dense"
                 value={this.state.username}
-                onChange={this.handleChange('username')}
+                onChange={this.handleChange("username")}
                 error={this.state.error}
               />
               <TextField
@@ -144,7 +143,7 @@ class LoginDialog extends React.Component {
                 fullWidth
                 margin="dense"
                 value={this.state.password}
-                onChange={this.handleChange('password')}
+                onChange={this.handleChange("password")}
                 error={this.state.error}
               />
               <div className={this.props.classes.orSpan}>– or –</div>
@@ -168,8 +167,8 @@ class LoginDialog extends React.Component {
         </Dialog>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
+            vertical: "bottom",
+            horizontal: "right"
           }}
           open={this.state.showLoginMessage}
           message="Authentication successful!"

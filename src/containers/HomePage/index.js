@@ -9,8 +9,8 @@
  * the linting exception.
  */
 
-import React from 'react';
-import LoginDialog from 'components/LoginDialog';
+import React from "react";
+import LoginDialog from "components/LoginDialog";
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
