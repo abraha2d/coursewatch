@@ -22,6 +22,7 @@ import { setToken } from "./actions";
 export class LoginPage extends React.PureComponent {
   handleLogin = token => {
     const { from } = this.props.location.state || { from: { pathname: "/" } };
+    localStorage.setItem("authToken", token);
     this.props.dispatch(setToken(token));
     this.props.dispatch(push(from));
   };

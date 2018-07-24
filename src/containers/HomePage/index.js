@@ -12,7 +12,8 @@ import { setToken } from "../LoginPage/actions";
 
 export class HomePage extends React.PureComponent {
   handleLogout = () => {
-    gapi.auth2.getAuthInstance().signOut(); //eslint-disable-line no-undef
+    gapi.load("auth2", () => gapi.auth2.getAuthInstance().signOut()); //eslint-disable-line no-undef
+    localStorage.removeItem("authToken");
     this.props.dispatch(setToken(null));
   };
 
