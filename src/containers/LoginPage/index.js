@@ -21,8 +21,9 @@ import { setToken } from "./actions";
 /* eslint-disable react/prefer-stateless-function */
 export class LoginPage extends React.PureComponent {
   handleLogin = token => {
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
     this.props.dispatch(setToken(token));
-    this.props.dispatch(push(this.props.location.state.from));
+    this.props.dispatch(push(from));
   };
 
   render() {
@@ -36,23 +37,15 @@ export class LoginPage extends React.PureComponent {
 }
 
 LoginPage.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  Auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
   Auth: makeSelectAuth()
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const withConnect = connect(mapStateToProps);
 
 const withReducer = injectReducer({ key: "auth", reducer });
 

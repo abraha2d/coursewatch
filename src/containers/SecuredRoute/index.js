@@ -5,13 +5,13 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { compose } from "redux";
 import { Redirect, Route } from "react-router-dom";
 
 import makeSelectAuth from "../LoginPage/selectors";
+import PropTypes from "prop-types";
+import { HomePage } from "../HomePage";
 
 function SecuredRoute({ component: Component, Auth, ...rest }) {
   return (
@@ -33,23 +33,12 @@ function SecuredRoute({ component: Component, Auth, ...rest }) {
   );
 }
 
-SecuredRoute.propTypes = {
-  dispatch: PropTypes.func.isRequired
+HomePage.propTypes = {
+  Auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
   Auth: makeSelectAuth()
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
-export default compose(withConnect)(SecuredRoute);
+export default connect(mapStateToProps)(SecuredRoute);
