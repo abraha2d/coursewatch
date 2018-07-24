@@ -27,4 +27,20 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+
 registerServiceWorker();
+
+if (module.hot) {
+  module.hot.accept("containers/App", () => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <CssBaseline>
+            <App />
+          </CssBaseline>
+        </ConnectedRouter>
+      </Provider>,
+      document.getElementById("root")
+    );
+  });
+}
