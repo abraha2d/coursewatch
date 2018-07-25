@@ -149,6 +149,14 @@ const styles = theme => ({
   },
   snackbarContent: {
     width: 360
+  },
+  rightAlign: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "flex-end"
+  },
+  logoutButton: {
+    color: "white"
   }
 });
 
@@ -203,6 +211,13 @@ class HomePage extends React.PureComponent {
             <Typography variant="title" color="inherit" noWrap>
               Coursewatch
             </Typography>
+
+            <div className={classes.rightAlign}>
+              <LogoutButton
+                variant="outlined"
+                className={classes.logoutButton}
+              />
+            </div>
           </Toolbar>
         </AppBar>
 
@@ -249,8 +264,6 @@ class HomePage extends React.PureComponent {
             To get started, edit <code>src/containers/HomePage/index.js</code>{" "}
             and save to reload.
           </Typography>
-
-          <LogoutButton />
         </main>
 
         <Button
