@@ -8,6 +8,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 
+import { Button } from "@material-ui/core";
+
 import { loadAuth2 } from "./utils";
 
 class LogoutButton extends React.PureComponent {
@@ -30,12 +32,12 @@ class LogoutButton extends React.PureComponent {
 
   render() {
     return (
-      <div>
+      <Button onClick={this.handleLogout} {...this.props}>
         <Helmet>
           <script src="https://apis.google.com/js/platform.js?onload=handleGoogleInitLogoutButton" />
         </Helmet>
-        <button onClick={this.handleLogout}>Logout</button>
-      </div>
+        Logout
+      </Button>
     );
   }
 }

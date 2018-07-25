@@ -18,7 +18,11 @@ export class ConnectedLogoutButton extends React.PureComponent {
   };
 
   render() {
-    return <LogoutButton onLogout={this.handleLogout}>Logout</LogoutButton>;
+    return (
+      <LogoutButton onLogout={this.handleLogout} {...this.props}>
+        Logout
+      </LogoutButton>
+    );
   }
 }
 
