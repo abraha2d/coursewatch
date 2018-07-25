@@ -6,6 +6,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import { push } from "connected-react-router/immutable";
 
 import { withStyles } from "@material-ui/core/styles";
 
@@ -30,6 +33,9 @@ import {
 } from "@material-ui/icons";
 
 import Subscriptions from "containers/Subscriptions";
+import Settings from "containers/Settings";
+import NotFoundPage from "containers/NotFoundPage";
+
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
 
 const styles = theme => ({
@@ -79,6 +85,12 @@ class HomePage extends React.PureComponent {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
 
+  handleNavigate = url => {
+    return () => {
+      this.props.dispatch(push(url));
+    };
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -87,14 +99,19 @@ class HomePage extends React.PureComponent {
         <div className={classes.toolbar} />
         <Divider />
         <MenuList>
-          <MenuItem>
+          <MenuItem
+            onClick={this.handleNavigate("/")}
+            selected={this.props.location.pathname === "/"}
+          >
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="Subscriptions" />
           </MenuItem>
-          <Divider />
-          <MenuItem>
+          <MenuItem
+            onClick={this.handleNavigate("/settings")}
+            selected={this.props.location.pathname === "/settings"}
+          >
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
@@ -156,7 +173,11 @@ class HomePage extends React.PureComponent {
 
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Subscriptions />
+          <Switch>
+            <Route exact path="/" component={Subscriptions} />
+            <Route exact path="/settings" component={Settings} />
+            <Route component={NotFoundPage} />
+          </Switch>
         </main>
       </div>
     );
@@ -164,8 +185,19 @@ class HomePage extends React.PureComponent {
 }
 
 HomePage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(HomePage);
+const mapStateToProps = state => {
+  let location = state.getIn(["router", "location"]).toJS();
+  if (location.location) {
+    location = location.location;
+  }
+  return { location };
+};
+
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(HomePage)
+);

@@ -13,14 +13,12 @@ import SecuredRoute from "containers/SecuredRoute";
 
 import HomePage from "containers/HomePage";
 import LoginPage from "containers/LoginPage";
-import NotFoundPage from "containers/NotFoundPage";
 
 export default function App() {
   return (
     <Switch>
-      <SecuredRoute exact path="/" component={HomePage} />
       <Route exact path="/login" component={LoginPage} />
-      <Route component={NotFoundPage} />
+      <SecuredRoute path="/" component={HomePage} />
     </Switch>
   );
 }
