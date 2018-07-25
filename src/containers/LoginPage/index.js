@@ -18,7 +18,6 @@ import reducer from "./reducer";
 import LoginDialog from "components/LoginDialog";
 import { setToken } from "./actions";
 
-/* eslint-disable react/prefer-stateless-function */
 export class LoginPage extends React.PureComponent {
   handleLogin = token => {
     const { from } = this.props.location.state || { from: { pathname: "/" } };

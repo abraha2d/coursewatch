@@ -1,6 +1,13 @@
+/**
+ *
+ * LoginDialog
+ *
+ */
+
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 import logo from "images/logo.png";
 
@@ -14,6 +21,7 @@ import {
   withMobileDialog,
   withStyles
 } from "@material-ui/core";
+import { loadAuth2 } from "./utils";
 
 const styles = theme => ({
   headerImage: {
@@ -49,21 +57,31 @@ class LoginDialog extends React.Component {
   }
 
   componentWillMount() {
-    window["handleGoogleSignIn"] = this.handleGoogleSignIn;
+    window.handleGoogleSignIn = this.handleGoogleSignIn;
+    window.handleGoogleInitLoginDialog = this.handleGoogleInit;
   }
 
   componentWillUnmount() {
-    delete window["handleGoogleSignIn"];
+    delete window.handleGoogleSignIn;
+    delete window.handleGoogleInitLoginDialog;
   }
 
-  handleChange(name) {
+  handleGoogleInit = () => {
+    loadAuth2().then(() =>
+      window.gapi.signin2.render("googleLogin", {
+        onsuccess: this.handleGoogleSignIn
+      })
+    );
+  };
+
+  handleChange = name => {
     return event => {
       this.setState({
         [name]: event.target.value,
         error: false
       });
     };
-  }
+  };
 
   auth = (apiURL, access_token, sendAuth) =>
     axios
@@ -100,6 +118,9 @@ class LoginDialog extends React.Component {
         fullScreen={this.props.fullScreen}
         aria-labelledby="form-dialog-title"
       >
+        <Helmet>
+          <script src="https://apis.google.com/js/platform.js?onload=handleGoogleInitLoginDialog" />
+        </Helmet>
         <form onSubmit={this.handleSignIn}>
           <DialogTitle id="form-dialog-title">
             <img
@@ -135,10 +156,7 @@ class LoginDialog extends React.Component {
               error={this.state.error !== false}
             />
             <div className={this.props.classes.orSpan}>– or –</div>
-            <div
-              className={`g-signin2 ${this.props.classes.googleLogin}`}
-              data-onsuccess="handleGoogleSignIn"
-            />
+            <div id="googleLogin" className={this.props.classes.googleLogin} />
           </DialogContent>
           <DialogActions>
             <Button>Forgot Password?</Button>

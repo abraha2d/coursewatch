@@ -5,30 +5,15 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import LogoutButton from "../LoginPage/ConnectedLogoutButton";
 
-import { setToken } from "../LoginPage/actions";
-
-export class HomePage extends React.PureComponent {
-  handleLogout = () => {
-    gapi.load("auth2", () => gapi.auth2.getAuthInstance().signOut()); //eslint-disable-line no-undef
-    localStorage.removeItem("authToken");
-    this.props.dispatch(setToken(null));
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>This is HomePage component!</h1>
-        <button onClick={this.handleLogout}>Logout</button>
-      </div>
-    );
-  }
+export function HomePage() {
+  return (
+    <div>
+      <h1>This is HomePage component!</h1>
+      <LogoutButton />
+    </div>
+  );
 }
 
-HomePage.propTypes = {
-  dispatch: PropTypes.func.isRequired
-};
-
-export default connect()(HomePage);
+export default HomePage;
