@@ -1,4 +1,4 @@
-/*
+/**
  * HomePage
  *
  * This is the first thing users see of our App, at the '/' route
@@ -15,11 +15,8 @@ import {
   Drawer,
   Hidden,
   IconButton,
-  List,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
   MenuList,
   MenuItem,
   Toolbar,
@@ -27,13 +24,12 @@ import {
 } from "@material-ui/core";
 
 import {
-  Add as AddIcon,
-  Delete as DeleteIcon,
   Inbox as InboxIcon,
   Menu as MenuIcon,
   Settings as SettingsIcon
 } from "@material-ui/icons";
 
+import Subscriptions from "containers/Subscriptions";
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
 
 const styles = theme => ({
@@ -95,7 +91,7 @@ class HomePage extends React.PureComponent {
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="Course List" />
+            <ListItemText primary="Subscriptions" />
           </MenuItem>
           <Divider />
           <MenuItem>
@@ -160,69 +156,7 @@ class HomePage extends React.PureComponent {
 
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <List>
-            <ListItem button>
-              <ListItemText
-                primary="ECE 4011 - Ece Culminating Design 1"
-                secondary="CRN: 86217"
-              />
-              <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button>
-              <ListItemText
-                primary="ECE 4180 - Embedded Systems Design"
-                secondary="CRN: 87541"
-              />
-              <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button>
-              <ListItemText
-                primary="ECE 3550 - Feedback Control Systems"
-                secondary="CRN: 86084"
-              />
-              <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button>
-              <ListItemText
-                primary="ID 2202 - Hist-Modern Indust Dsgn"
-                secondary="CRN: 80719"
-              />
-              <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button>
-              <ListItemText
-                primary="VIP 4602 - Vip Project Team: Sr II"
-                secondary="CRN: 91557"
-              />
-              <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Add a course..." />
-            </ListItem>
-          </List>
+          <Subscriptions />
         </main>
       </div>
     );
