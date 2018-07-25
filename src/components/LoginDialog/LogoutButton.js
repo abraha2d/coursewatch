@@ -20,7 +20,7 @@ class LogoutButton extends React.PureComponent {
   }
 
   handleGoogleInit = () => {
-    loadAuth2();
+    loadAuth2().then(() => {}, object => console.error(object.error));
   };
 
   handleLogout = () => {

@@ -67,10 +67,12 @@ class LoginDialog extends React.Component {
   }
 
   handleGoogleInit = () => {
-    loadAuth2().then(() =>
-      window.gapi.signin2.render("googleLogin", {
-        onsuccess: this.handleGoogleSignIn
-      })
+    loadAuth2().then(
+      () =>
+        window.gapi.signin2.render("googleLogin", {
+          onsuccess: this.handleGoogleSignIn
+        }),
+      object => console.error(object.error)
     );
   };
 
