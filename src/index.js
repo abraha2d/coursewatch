@@ -9,6 +9,7 @@ import configureStore from "./configureStore";
 import registerServiceWorker from "./registerServiceWorker";
 
 import { CssBaseline } from "@material-ui/core";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // Create redux store with history
 const initialState = {};
@@ -17,11 +18,15 @@ const history = createHistory({
 });
 const store = configureStore(initialState, history);
 
+const theme = createMuiTheme();
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <CssBaseline>
-        <App />
+        <MuiThemeProvider theme={theme}>
+          <App />
+        </MuiThemeProvider>
       </CssBaseline>
     </ConnectedRouter>
   </Provider>,
