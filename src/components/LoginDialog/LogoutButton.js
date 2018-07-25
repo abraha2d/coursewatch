@@ -20,12 +20,10 @@ class LogoutButton extends React.PureComponent {
   }
 
   handleGoogleInit = () => {
-    console.log("LogoutButton handleGoogleInit");
     loadAuth2();
   };
 
   handleLogout = () => {
-    console.log("LogoutButton handleLogout");
     window.gapi.auth2.getAuthInstance().signOut();
     this.props.onLogout();
   };

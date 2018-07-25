@@ -5,7 +5,8 @@
  */
 
 import React from "react";
-import LogoutButton from "../LoginPage/ConnectedLogoutButton";
+
+import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
 
 export function HomePage() {
   return (

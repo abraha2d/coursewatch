@@ -6,12 +6,12 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 
-import makeSelectAuth from "../LoginPage/selectors";
-import { setToken } from "../LoginPage/actions";
+import makeSelectAuth from "containers/LoginPage/selectors";
+import { setToken } from "containers/LoginPage/actions";
 
 function SecuredRoute({ component: Component, dispatch, Auth, ...rest }) {
   let token = Auth.token;

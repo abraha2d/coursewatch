@@ -9,11 +9,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import LogoutButton from "components/LoginDialog/LogoutButton";
-import { setToken } from "../LoginPage/actions";
+import { setToken } from "./actions";
 
 export class ConnectedLogoutButton extends React.PureComponent {
   handleLogout = () => {
-    console.log("ConnectedLogoutButton handleLogout");
     localStorage.removeItem("authToken");
     this.props.dispatch(setToken(null));
   };
