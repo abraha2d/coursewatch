@@ -22,8 +22,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemAvatar,
+  ListItemSecondaryAction,
   Snackbar,
-  Button
+  Button,
+  Avatar
 } from "@material-ui/core";
 
 import {
@@ -35,7 +38,8 @@ import {
   Mail as MailIcon,
   Delete as DeleteIcon,
   Report as ReportIcon,
-  Add as AddIcon
+  Add as AddIcon,
+  Folder as FolderIcon
 } from "@material-ui/icons";
 
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
@@ -160,6 +164,14 @@ const styles = theme => ({
   }
 });
 
+function generate(element) {
+  return [0, 1, 2, 3, 4].map(value =>
+    React.cloneElement(element, {
+      key: value
+    })
+  );
+}
+
 class HomePage extends React.PureComponent {
   state = {
     mobileOpen: false,
@@ -264,6 +276,27 @@ class HomePage extends React.PureComponent {
             To get started, edit <code>src/containers/HomePage/index.js</code>{" "}
             and save to reload.
           </Typography>
+
+          <List>
+            {generate(
+              <ListItem button>
+                <ListItemAvatar>
+                  <Avatar>
+                    <FolderIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary="Single-line item"
+                  secondary="Secondary text"
+                />
+                <ListItemSecondaryAction>
+                  <IconButton aria-label="Delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )}
+          </List>
         </main>
 
         <Button
