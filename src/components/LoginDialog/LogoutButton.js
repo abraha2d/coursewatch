@@ -31,8 +31,9 @@ class LogoutButton extends React.PureComponent {
   };
 
   render() {
+    const { onLogout, ...rest } = this.props;
     return (
-      <Button onClick={this.handleLogout} {...this.props}>
+      <Button onClick={this.handleLogout} {...rest}>
         <Helmet>
           <script src="https://apis.google.com/js/platform.js?onload=handleGoogleInitLogoutButton" />
         </Helmet>
