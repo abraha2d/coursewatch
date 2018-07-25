@@ -9,30 +9,34 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 
 import { withStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Hidden from "@material-ui/core/Hidden";
-import Divider from "@material-ui/core/Divider";
-import MenuIcon from "@material-ui/icons/Menu";
 
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import StarIcon from "@material-ui/icons/Star";
-import SendIcon from "@material-ui/icons/Send";
-import MailIcon from "@material-ui/icons/Mail";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ReportIcon from "@material-ui/icons/Report";
+import {
+  Drawer,
+  AppBar,
+  Toolbar,
+  List,
+  Typography,
+  IconButton,
+  Hidden,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Snackbar,
+  Button
+} from "@material-ui/core";
 
-import Snackbar from "@material-ui/core/Snackbar";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
+import {
+  Menu as MenuIcon,
+  Inbox as InboxIcon,
+  Drafts as DraftsIcon,
+  Star as StarIcon,
+  Send as SendIcon,
+  Mail as MailIcon,
+  Delete as DeleteIcon,
+  Report as ReportIcon,
+  Add as AddIcon
+} from "@material-ui/icons";
 
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
 
