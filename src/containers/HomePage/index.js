@@ -240,13 +240,15 @@ class HomePage extends React.PureComponent {
 
           <header className="App-header">
             {/*<img src={logo} className="App-logo" alt="logo"/>*/}
-            <h1 className="App-title">Welcome to React</h1>
+            <Typography variant="display1" className="App-title">
+              Welcome to React
+            </Typography>
           </header>
 
-          <p className="App-intro">
+          <Typography variant="subheading" className="App-intro">
             To get started, edit <code>src/containers/HomePage/index.js</code>{" "}
             and save to reload.
-          </p>
+          </Typography>
 
           <LogoutButton />
         </main>
