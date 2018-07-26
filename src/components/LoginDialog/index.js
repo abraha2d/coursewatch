@@ -183,4 +183,6 @@ LoginDialog.propTypes = {
   onLogin: PropTypes.func
 };
 
-export default withStyles(styles)(withMobileDialog()(LoginDialog));
+export default withStyles(styles, { withTheme: true })(
+  withMobileDialog()(LoginDialog)
+);

@@ -32,7 +32,7 @@ import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
 import reducer from "./reducer";
 
-const styles = theme => ({
+const styles = () => ({
   centerLoading: {
     textAlign: "center"
   }
@@ -120,7 +120,10 @@ class Subscriptions extends React.PureComponent {
           {this.state.response ? (
             this.state.response.data.map(course => (
               <ListItem button key={course.id}>
-                <ListItemText primary="" secondary={`CRN: ${course.crn}`} />
+                <ListItemText
+                  primary={course.name}
+                  secondary={`Term/CRN: ${course.term}/${course.crn}`}
+                />
                 <ListItemSecondaryAction>
                   <IconButton aria-label="Delete">
                     <DeleteIcon />
@@ -160,4 +163,4 @@ const withReducer = injectReducer({ key: "subscriptions", reducer });
 export default compose(
   withReducer,
   withConnect
-)(withStyles(styles, { withTheme: true })(Subscriptions));
+)(withStyles(styles)(Subscriptions));
