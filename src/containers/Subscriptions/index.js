@@ -62,7 +62,14 @@ class Subscriptions extends React.PureComponent {
   };
 
   deleteCourse = id => {
-    console.log("Deleting course", id);
+    axios
+      .delete(`/api/subscriptions/${id}`, {
+        headers: { Authorization: `Bearer ${this.props.Auth.token}` }
+      })
+      .then(() => {
+        this.refresh();
+      })
+      .catch(error => this.setState({ error }));
   };
 
   handleDialogOpen = () => {
