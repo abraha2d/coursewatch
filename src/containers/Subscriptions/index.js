@@ -4,6 +4,7 @@
  *
  */
 
+import AddSubscriptionDialog from "components/AddSubscriptionDialog";
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -41,7 +42,8 @@ const styles = () => ({
 class Subscriptions extends React.PureComponent {
   state = {
     response: null,
-    error: false
+    error: false,
+    dialogOpen: false
   };
 
   componentWillMount() {
@@ -50,11 +52,18 @@ class Subscriptions extends React.PureComponent {
         headers: { Authorization: `Bearer ${this.props.Auth.token}` }
       })
       .then(response => {
-        console.log(response);
         this.setState({ response });
       })
       .catch(error => this.setState({ error }));
   }
+
+  handleDialogOpen = () => {
+    this.setState({ dialogOpen: true });
+  };
+
+  handleDialogClose = () => {
+    this.setState({ dialogOpen: false });
+  };
 
   render() {
     const { classes } = this.props;
@@ -134,13 +143,17 @@ class Subscriptions extends React.PureComponent {
           ) : (
             <CircularProgress />
           )}
-          <ListItem button>
+          <ListItem button onClick={this.handleDialogOpen}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
             <ListItemText primary="Add a course..." />
           </ListItem>
         </List>
+        <AddSubscriptionDialog
+          open={this.state.dialogOpen}
+          onClose={this.handleDialogClose}
+        />
       </div>
     );
   }
