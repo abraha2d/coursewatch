@@ -47,22 +47,29 @@ class Subscriptions extends React.PureComponent {
   };
 
   componentWillMount() {
+    this.refresh();
+  }
+
+  refresh = () => {
     axios
-      .get("/api/subscriptions/", {
+      .get("/api/subscriptions", {
         headers: { Authorization: `Bearer ${this.props.Auth.token}` }
       })
       .then(response => {
         this.setState({ response });
       })
       .catch(error => this.setState({ error }));
-  }
+  };
 
   handleDialogOpen = () => {
     this.setState({ dialogOpen: true });
   };
 
-  handleDialogClose = () => {
+  handleDialogClose = response => {
     this.setState({ dialogOpen: false });
+    if (response) {
+      this.refresh();
+    }
   };
 
   render() {
@@ -130,7 +137,7 @@ class Subscriptions extends React.PureComponent {
             this.state.response.data.map(course => (
               <ListItem button key={course.id}>
                 <ListItemText
-                  primary={course.name}
+                  primary={course.title}
                   secondary={`Term/CRN: ${course.term}/${course.crn}`}
                 />
                 <ListItemSecondaryAction>
@@ -151,6 +158,7 @@ class Subscriptions extends React.PureComponent {
           </ListItem>
         </List>
         <AddSubscriptionDialog
+          apiAccessToken={this.props.Auth.token}
           open={this.state.dialogOpen}
           onClose={this.handleDialogClose}
         />
