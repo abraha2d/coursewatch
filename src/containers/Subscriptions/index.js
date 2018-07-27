@@ -61,6 +61,10 @@ class Subscriptions extends React.PureComponent {
       .catch(error => this.setState({ error }));
   };
 
+  deleteCourse = id => {
+    console.log("Deleting course", id);
+  };
+
   handleDialogOpen = () => {
     this.setState({ dialogOpen: true });
   };
@@ -78,61 +82,6 @@ class Subscriptions extends React.PureComponent {
       <div>
         <Typography variant="title">Subscriptions</Typography>
         <List className={classes.centerLoading}>
-          <ListItem button>
-            <ListItemText
-              primary="ECE 4011 - Ece Culminating Design 1"
-              secondary="CRN: 86217"
-            />
-            <ListItemSecondaryAction>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem button>
-            <ListItemText
-              primary="ECE 4180 - Embedded Systems Design"
-              secondary="CRN: 87541"
-            />
-            <ListItemSecondaryAction>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem button>
-            <ListItemText
-              primary="ECE 3550 - Feedback Control Systems"
-              secondary="CRN: 86084"
-            />
-            <ListItemSecondaryAction>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem button>
-            <ListItemText
-              primary="ID 2202 - Hist-Modern Indust Dsgn"
-              secondary="CRN: 80719"
-            />
-            <ListItemSecondaryAction>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem button>
-            <ListItemText
-              primary="VIP 4602 - Vip Project Team: Sr II"
-              secondary="CRN: 91557"
-            />
-            <ListItemSecondaryAction>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
           {this.state.response ? (
             this.state.response.data.map(course => (
               <ListItem button key={course.id}>
@@ -141,7 +90,10 @@ class Subscriptions extends React.PureComponent {
                   secondary={`Term/CRN: ${course.term}/${course.crn}`}
                 />
                 <ListItemSecondaryAction>
-                  <IconButton aria-label="Delete">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() => this.deleteCourse(course.id)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
