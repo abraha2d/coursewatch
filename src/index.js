@@ -13,9 +13,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // Create redux store with history
 const initialState = {};
-const history = createHistory({
-  basename: "/coursewatch/"
-});
+const history = createHistory({});
 const store = configureStore(initialState, history);
 
 const theme = createMuiTheme();
