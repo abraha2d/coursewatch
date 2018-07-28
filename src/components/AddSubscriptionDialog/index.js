@@ -54,7 +54,10 @@ class AddSubscriptionDialog extends React.PureComponent {
           headers: { Authorization: `Bearer ${this.props.apiAccessToken}` }
         }
       )
-      .then(this.props.onClose);
+      .then(response => {
+        this.setState({ crn: "" });
+        this.props.onClose(response);
+      });
   };
 
   render() {
