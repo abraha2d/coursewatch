@@ -1,6 +1,6 @@
 /**
  *
- * AddSubscriptionDialog
+ * AddCourseDialog
  *
  */
 
@@ -18,7 +18,7 @@ import {
   withMobileDialog
 } from "@material-ui/core";
 
-class AddSubscriptionDialog extends React.PureComponent {
+class AddCourseDialog extends React.PureComponent {
   state = {
     term: "201809",
     crn: "",
@@ -46,8 +46,8 @@ class AddSubscriptionDialog extends React.PureComponent {
       .post(
         "/api/subscriptions",
         {
-          crn: this.state.crn,
           term: this.state.term,
+          crn: this.state.crn,
           title: `Sample Course (CRN: ${this.state.crn})`
         },
         {
@@ -107,11 +107,11 @@ class AddSubscriptionDialog extends React.PureComponent {
   }
 }
 
-AddSubscriptionDialog.propTypes = {
+AddCourseDialog.propTypes = {
   fullScreen: PropTypes.bool,
   open: PropTypes.bool,
   onClose: PropTypes.func,
   apiAccessToken: PropTypes.string
 };
 
-export default withMobileDialog()(AddSubscriptionDialog);
+export default withMobileDialog()(AddCourseDialog);

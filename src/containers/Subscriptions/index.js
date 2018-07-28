@@ -4,7 +4,6 @@
  *
  */
 
-import AddSubscriptionDialog from "components/AddSubscriptionDialog";
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -22,12 +21,14 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
+  Paper,
   Typography
 } from "@material-ui/core";
 
 import { Add as AddIcon, Delete as DeleteIcon } from "@material-ui/icons";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
+import AddCourseDialog from "components/AddCourseDialog";
 
 import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
@@ -36,13 +37,21 @@ import reducer from "./reducer";
 const styles = () => ({
   centerLoading: {
     textAlign: "center"
+  },
+  errorPaper: {
+    backgroundColor: "#EF5350",
+    marginTop: "10px",
+    padding: "10px"
+  },
+  errorText: {
+    color: "#FFFFFF"
   }
 });
 
 class Subscriptions extends React.PureComponent {
   state = {
     response: null,
-    error: false,
+    error: null,
     dialogOpen: false
   };
 
@@ -51,6 +60,7 @@ class Subscriptions extends React.PureComponent {
   }
 
   refresh = () => {
+    this.setState({ error: null });
     axios
       .get("/api/subscriptions", {
         headers: { Authorization: `Bearer ${this.props.Auth.token}` }
@@ -88,6 +98,13 @@ class Subscriptions extends React.PureComponent {
     return (
       <div>
         <Typography variant="title">Subscriptions</Typography>
+        {this.state.error && (
+          <Paper className={classes.errorPaper}>
+            <Typography className={classes.errorText} variant="subheading">
+              {this.state.error}
+            </Typography>
+          </Paper>
+        )}
         <List className={classes.centerLoading}>
           {this.state.response ? (
             this.state.response.data.map(course => (
@@ -116,7 +133,7 @@ class Subscriptions extends React.PureComponent {
             <ListItemText primary="Add a course..." />
           </ListItem>
         </List>
-        <AddSubscriptionDialog
+        <AddCourseDialog
           apiAccessToken={this.props.Auth.token}
           open={this.state.dialogOpen}
           onClose={this.handleDialogClose}
