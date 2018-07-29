@@ -14,6 +14,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  LinearProgress,
   TextField,
   withMobileDialog
 } from "@material-ui/core";
@@ -25,7 +26,8 @@ class AddCourseDialog extends React.PureComponent {
     errors: {
       term: false,
       crn: false
-    }
+    },
+    loading: false
   };
 
   handleChange = name => {
@@ -42,6 +44,7 @@ class AddCourseDialog extends React.PureComponent {
 
   addCourse = event => {
     event.preventDefault();
+    this.setState({ loading: true });
     axios
       .post(
         "/api/subscriptions",
@@ -55,6 +58,7 @@ class AddCourseDialog extends React.PureComponent {
         }
       )
       .then(response => {
+        this.setState({ loading: false });
         this.props.onClose(response);
       });
   };
@@ -67,6 +71,7 @@ class AddCourseDialog extends React.PureComponent {
         fullScreen={this.props.fullScreen}
         aria-labelledby="add-dialog-title"
       >
+        {this.state.loading && <LinearProgress />}
         <form onSubmit={this.addCourse}>
           <DialogTitle id="add-dialog-title">Add course</DialogTitle>
           <DialogContent>
