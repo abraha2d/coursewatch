@@ -55,7 +55,6 @@ class AddCourseDialog extends React.PureComponent {
         }
       )
       .then(response => {
-        this.setState({ crn: "" });
         this.props.onClose(response);
       });
   };
@@ -63,7 +62,7 @@ class AddCourseDialog extends React.PureComponent {
   render() {
     return (
       <Dialog
-        open={this.props.open}
+        open
         onClose={() => this.props.onClose()}
         fullScreen={this.props.fullScreen}
         aria-labelledby="add-dialog-title"
@@ -109,7 +108,6 @@ class AddCourseDialog extends React.PureComponent {
 
 AddCourseDialog.propTypes = {
   fullScreen: PropTypes.bool,
-  open: PropTypes.bool,
   onClose: PropTypes.func,
   apiAccessToken: PropTypes.string
 };

@@ -29,6 +29,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@material-ui/icons";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
 import AddCourseDialog from "components/AddCourseDialog";
+import EditCourseDialog from "components/EditCourseDialog";
 
 import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
@@ -52,7 +53,8 @@ class Subscriptions extends React.PureComponent {
   state = {
     response: null,
     error: null,
-    dialogOpen: false
+    addDialogOpen: false,
+    editCourse: null
   };
 
   componentWillMount() {
@@ -82,12 +84,23 @@ class Subscriptions extends React.PureComponent {
       .catch(error => this.setState({ error }));
   };
 
-  handleDialogOpen = () => {
-    this.setState({ dialogOpen: true });
+  openAddDialog = () => {
+    this.setState({ addDialogOpen: true });
   };
 
-  handleDialogClose = response => {
-    this.setState({ dialogOpen: false });
+  handleAddDialogClose = response => {
+    this.setState({ addDialogOpen: false });
+    if (response) {
+      this.refresh();
+    }
+  };
+
+  openEditDialog = course => () => {
+    this.setState({ editCourse: course });
+  };
+
+  handleEditDialogClose = response => {
+    this.setState({ editCourse: null });
     if (response) {
       this.refresh();
     }
@@ -108,10 +121,14 @@ class Subscriptions extends React.PureComponent {
         <List className={classes.centerLoading}>
           {this.state.response ? (
             this.state.response.data.map(course => (
-              <ListItem button key={course.id}>
+              <ListItem
+                button
+                key={course.id}
+                onClick={this.openEditDialog(course)}
+              >
                 <ListItemText
                   primary={course.title}
-                  secondary={`Term/CRN: ${course.term}/${course.crn}`}
+                  secondary={`CRN: ${course.crn} (Term: ${course.term})`}
                 />
                 <ListItemSecondaryAction>
                   <IconButton
@@ -126,18 +143,26 @@ class Subscriptions extends React.PureComponent {
           ) : (
             <CircularProgress />
           )}
-          <ListItem button onClick={this.handleDialogOpen}>
+          <ListItem button onClick={this.openAddDialog}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
             <ListItemText primary="Add a course..." />
           </ListItem>
         </List>
-        <AddCourseDialog
-          apiAccessToken={this.props.auth.token}
-          open={this.state.dialogOpen}
-          onClose={this.handleDialogClose}
-        />
+        {this.state.addDialogOpen && (
+          <AddCourseDialog
+            apiAccessToken={this.props.auth.token}
+            onClose={this.handleAddDialogClose}
+          />
+        )}
+        {this.state.editCourse != null && (
+          <EditCourseDialog
+            apiAccessToken={this.props.auth.token}
+            onClose={this.handleEditDialogClose}
+            course={this.state.editCourse}
+          />
+        )}
       </div>
     );
   }
