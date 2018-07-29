@@ -14,8 +14,8 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 
 import {
-  CircularProgress,
   IconButton,
+  LinearProgress,
   List,
   ListItem,
   ListItemIcon,
@@ -36,8 +36,8 @@ import makeSelectSubscriptions from "./selectors";
 import reducer from "./reducer";
 
 const styles = () => ({
-  centerLoading: {
-    textAlign: "center"
+  loadingProgress: {
+    marginTop: "10px"
   },
   errorPaper: {
     backgroundColor: "#EF5350",
@@ -51,9 +51,10 @@ const styles = () => ({
 
 class Subscriptions extends React.PureComponent {
   state = {
+    loading: true,
     response: null,
     error: null,
-    addDialogOpen: false,
+    addCourse: false,
     editCourse: null
   };
 
@@ -62,18 +63,19 @@ class Subscriptions extends React.PureComponent {
   }
 
   refresh = () => {
-    this.setState({ error: null });
+    this.setState({ error: null, loading: true });
     axios
       .get("/api/subscriptions", {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(response => {
-        this.setState({ response });
+        this.setState({ response, loading: false });
       })
       .catch(error => this.setState({ error }));
   };
 
   deleteCourse = id => {
+    this.setState({ loading: true });
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
@@ -85,11 +87,11 @@ class Subscriptions extends React.PureComponent {
   };
 
   openAddDialog = () => {
-    this.setState({ addDialogOpen: true });
+    this.setState({ addCourse: true });
   };
 
   handleAddDialogClose = response => {
-    this.setState({ addDialogOpen: false });
+    this.setState({ addCourse: false });
     if (response) {
       this.refresh();
     }
@@ -111,15 +113,18 @@ class Subscriptions extends React.PureComponent {
     return (
       <div>
         <Typography variant="title">Subscriptions</Typography>
+        {this.state.loading && (
+          <LinearProgress className={classes.loadingProgress} />
+        )}
         {this.state.error && (
           <Paper className={classes.errorPaper}>
             <Typography className={classes.errorText} variant="subheading">
-              {this.state.error}
+              {this.state.error.toString()}
             </Typography>
           </Paper>
         )}
-        <List className={classes.centerLoading}>
-          {this.state.response ? (
+        <List>
+          {this.state.response &&
             this.state.response.data.map(course => (
               <ListItem
                 button
@@ -139,10 +144,7 @@ class Subscriptions extends React.PureComponent {
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
-            ))
-          ) : (
-            <CircularProgress />
-          )}
+            ))}
           <ListItem button onClick={this.openAddDialog}>
             <ListItemIcon>
               <AddIcon />
@@ -150,7 +152,7 @@ class Subscriptions extends React.PureComponent {
             <ListItemText primary="Add a course..." />
           </ListItem>
         </List>
-        {this.state.addDialogOpen && (
+        {this.state.addCourse && (
           <AddCourseDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleAddDialogClose}
