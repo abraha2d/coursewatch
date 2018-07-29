@@ -100,7 +100,7 @@ class LoginDialog extends React.Component {
           : {}
       )
       .then(response => {
-        this.props.onLogin(response.data.token);
+        this.props.onLogin(response.data);
       })
       .catch(error => this.setState({ error }));
 

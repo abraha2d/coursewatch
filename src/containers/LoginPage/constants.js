@@ -4,4 +4,4 @@
  *
  */
 
-export const SET_TOKEN = "app/Auth/SET_TOKEN";
+export const SET_AUTH = "app/auth/SET_AUTH";

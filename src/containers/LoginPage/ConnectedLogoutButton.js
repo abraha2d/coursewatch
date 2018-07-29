@@ -9,15 +9,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import LogoutButton from "components/LoginDialog/LogoutButton";
-import { setToken } from "./actions";
+import { setAuth } from "./actions";
 
 export class ConnectedLogoutButton extends React.PureComponent {
   handleLogout = () => {
     localStorage.removeItem("authToken");
-    this.props.dispatch(setToken(null));
+    localStorage.removeItem("authUser");
+    this.props.dispatch(setAuth({ token: null, user: null }));
   };
 
   render() {
+    // noinspection JSUnusedLocalSymbols
     const { dispatch, ...rest } = this.props;
     return (
       <LogoutButton onLogout={this.handleLogout} {...rest}>

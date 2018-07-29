@@ -63,7 +63,7 @@ class Subscriptions extends React.PureComponent {
     this.setState({ error: null });
     axios
       .get("/api/subscriptions", {
-        headers: { Authorization: `Bearer ${this.props.Auth.token}` }
+        headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(response => {
         this.setState({ response });
@@ -74,7 +74,7 @@ class Subscriptions extends React.PureComponent {
   deleteCourse = id => {
     axios
       .delete(`/api/subscriptions/${id}`, {
-        headers: { Authorization: `Bearer ${this.props.Auth.token}` }
+        headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(() => {
         this.refresh();
@@ -134,7 +134,7 @@ class Subscriptions extends React.PureComponent {
           </ListItem>
         </List>
         <AddCourseDialog
-          apiAccessToken={this.props.Auth.token}
+          apiAccessToken={this.props.auth.token}
           open={this.state.dialogOpen}
           onClose={this.handleDialogClose}
         />
@@ -145,12 +145,12 @@ class Subscriptions extends React.PureComponent {
 
 Subscriptions.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  Auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
   subscriptions: makeSelectSubscriptions(),
-  Auth: makeSelectAuth()
+  auth: makeSelectAuth()
 });
 
 const withConnect = connect(mapStateToProps);

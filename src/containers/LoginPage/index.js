@@ -10,13 +10,14 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router/immutable";
 
 import LoginDialog from "components/LoginDialog";
-import { setToken } from "./actions";
+import { setAuth } from "./actions";
 
 export class LoginPage extends React.PureComponent {
-  handleLogin = token => {
+  handleLogin = response => {
     const { from } = this.props.location.state || { from: { pathname: "/" } };
-    localStorage.setItem("authToken", token);
-    this.props.dispatch(setToken(token));
+    localStorage.setItem("authToken", response.token);
+    localStorage.setItem("authUser", response.user);
+    this.props.dispatch(setAuth(response));
     this.props.dispatch(push(from));
   };
 

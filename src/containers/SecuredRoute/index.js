@@ -11,14 +11,15 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
-import { setToken } from "containers/LoginPage/actions";
+import { setAuth } from "containers/LoginPage/actions";
 
-function SecuredRoute({ component: Component, dispatch, Auth, ...rest }) {
-  let token = Auth.token;
+function SecuredRoute({ component: Component, dispatch, auth, ...rest }) {
+  let token = auth.token;
   if (!token) {
     token = localStorage.getItem("authToken");
+    const user = localStorage.getItem("authUser");
     if (token) {
-      dispatch(setToken(token));
+      dispatch(setAuth({ token, user }));
     }
   }
   return (
@@ -42,11 +43,11 @@ function SecuredRoute({ component: Component, dispatch, Auth, ...rest }) {
 
 SecuredRoute.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  Auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
-  Auth: makeSelectAuth()
+  auth: makeSelectAuth()
 });
 
 export default connect(mapStateToProps)(SecuredRoute);

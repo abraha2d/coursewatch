@@ -4,11 +4,11 @@
  *
  */
 
-import { SET_TOKEN } from "./constants";
+import { SET_AUTH } from "./constants";
 
-export function setToken(token) {
+export function setAuth(response) {
   return {
-    type: SET_TOKEN,
-    token
+    type: SET_AUTH,
+    payload: response
   };
 }
