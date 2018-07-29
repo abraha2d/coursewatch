@@ -17,7 +17,7 @@ function SecuredRoute({ component: Component, dispatch, auth, ...rest }) {
   let token = auth.token;
   if (!token) {
     token = localStorage.getItem("authToken");
-    const user = localStorage.getItem("authUser");
+    const user = JSON.parse(localStorage.getItem("authUser"));
     if (token) {
       dispatch(setAuth({ token, user }));
     }

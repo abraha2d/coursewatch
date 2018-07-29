@@ -16,7 +16,7 @@ export class LoginPage extends React.PureComponent {
   handleLogin = response => {
     const { from } = this.props.location.state || { from: { pathname: "/" } };
     localStorage.setItem("authToken", response.token);
-    localStorage.setItem("authUser", response.user);
+    localStorage.setItem("authUser", JSON.stringify(response.user));
     this.props.dispatch(setAuth(response));
     this.props.dispatch(push(from));
   };

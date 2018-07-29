@@ -14,10 +14,12 @@ import { withStyles } from "@material-ui/core/styles";
 
 import {
   AppBar,
+  Avatar,
   Divider,
   Drawer,
   Hidden,
   IconButton,
+  ListItem,
   ListItemIcon,
   ListItemText,
   MenuList,
@@ -97,6 +99,15 @@ class HomePage extends React.PureComponent {
     const drawer = (
       <div>
         <div className={classes.toolbar} />
+        <Divider />
+        <ListItem onClick={this.handleNavigate("/")}>
+          <ListItemIcon>
+            <Avatar src={this.props.auth.user.picture} />
+          </ListItemIcon>
+          <Typography variant="subheading">
+            {this.props.auth.user.name}
+          </Typography>
+        </ListItem>
         <Divider />
         <MenuList>
           <MenuItem
@@ -187,7 +198,9 @@ class HomePage extends React.PureComponent {
 HomePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  location: PropTypes.object,
+  auth: PropTypes.object
 };
 
 const mapStateToProps = state => {
@@ -195,7 +208,8 @@ const mapStateToProps = state => {
   if (location.location) {
     location = location.location;
   }
-  return { location };
+  const auth = state.get("auth").toJS();
+  return { location, auth };
 };
 
 export default connect(mapStateToProps)(
