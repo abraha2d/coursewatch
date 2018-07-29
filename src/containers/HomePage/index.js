@@ -24,6 +24,7 @@ import {
   ListItemText,
   MenuList,
   MenuItem,
+  SwipeableDrawer,
   Toolbar,
   Typography
 } from "@material-ui/core";
@@ -132,6 +133,8 @@ class HomePage extends React.PureComponent {
       </div>
     );
 
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+
     return (
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar}>
@@ -155,9 +158,10 @@ class HomePage extends React.PureComponent {
         </AppBar>
 
         <Hidden mdUp>
-          <Drawer
+          <SwipeableDrawer
             variant="temporary"
             open={this.state.drawerOpen}
+            onOpen={this.handleDrawerToggle}
             onClose={this.handleDrawerToggle}
             classes={{
               paper: classes.drawerPaper
@@ -165,9 +169,10 @@ class HomePage extends React.PureComponent {
             ModalProps={{
               keepMounted: true // Better open performance on mobile.
             }}
+            disableDiscovery={iOS}
           >
             {drawer}
-          </Drawer>
+          </SwipeableDrawer>
         </Hidden>
 
         <Hidden smDown>
