@@ -77,13 +77,11 @@ class LoginDialog extends React.Component {
     );
   };
 
-  handleChange = name => {
-    return event => {
-      this.setState({
-        [name]: event.target.value,
-        error: false
-      });
-    };
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+      error: false
+    });
   };
 
   auth = (apiURL, access_token, sendAuth) => {

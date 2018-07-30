@@ -81,7 +81,7 @@ class Subscriptions extends React.PureComponent {
       .catch(error => this.setState({ loading: false, error }));
   };
 
-  deleteCourse = id => {
+  deleteCourse = id => () => {
     this.setState({ error: null, [`${id}-loading`]: true });
     axios
       .delete(`/api/subscriptions/${id}`, {
@@ -148,7 +148,7 @@ class Subscriptions extends React.PureComponent {
                 <ListItemSecondaryAction>
                   <ProgressButton
                     aria-label="Delete"
-                    onClick={() => this.deleteCourse(course.id)}
+                    onClick={this.deleteCourse(course.id)}
                     loading={this.state[`${course.id}-loading`]}
                   >
                     <DeleteIcon />
