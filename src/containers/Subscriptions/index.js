@@ -23,7 +23,11 @@ import {
   Typography
 } from "@material-ui/core";
 
-import { Add as AddIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Refresh as RefreshIcon
+} from "@material-ui/icons";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
 
@@ -38,6 +42,10 @@ import makeSelectSubscriptions from "./selectors";
 import reducer from "./reducer";
 
 const styles = () => ({
+  headerDiv: {
+    display: "flex",
+    alignItems: "center"
+  },
   loadingProgress: {
     marginTop: "10px"
   },
@@ -113,7 +121,12 @@ class Subscriptions extends React.PureComponent {
     const { classes } = this.props;
     return (
       <div>
-        <Typography variant="title">Subscriptions</Typography>
+        <div className={classes.headerDiv}>
+          <Typography variant="title">Subscriptions</Typography>
+          <ProgressButton onClick={this.refresh} resetAfterOne>
+            <RefreshIcon />
+          </ProgressButton>
+        </div>
         {this.state.loading && (
           <DelayedProgress className={classes.loadingProgress} />
         )}
