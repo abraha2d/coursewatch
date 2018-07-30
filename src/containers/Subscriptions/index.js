@@ -124,13 +124,10 @@ class Subscriptions extends React.PureComponent {
       <div>
         <div className={classes.headerDiv}>
           <Typography variant="title">Subscriptions</Typography>
-          <ProgressButton onClick={this.refresh} resetAfterOne>
+          <ProgressButton onClick={this.refresh} loading={this.state.loading}>
             <RefreshIcon />
           </ProgressButton>
         </div>
-        {this.state.loading && (
-          <DelayedProgress className={classes.loadingProgress} delay={1550} />
-        )}
         {this.state.error && (
           <Paper className={classes.errorPaper}>
             <Typography className={classes.errorText} variant="subheading">
