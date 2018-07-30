@@ -14,11 +14,26 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   TextField,
-  withMobileDialog
+  Typography,
+  withMobileDialog,
+  withStyles
 } from "@material-ui/core";
 
 import DelayedProgress from "components/DelayedProgress";
+
+const styles = theme => ({
+  errorPaper: {
+    backgroundColor: "#EF5350",
+    padding: `${theme.spacing.unit}px`,
+    margin: `${3 * theme.spacing.unit}px`,
+    marginBottom: 0
+  },
+  errorText: {
+    color: "#FFFFFF"
+  }
+});
 
 class EditCourseDialog extends React.PureComponent {
   constructor(props) {
@@ -27,12 +42,13 @@ class EditCourseDialog extends React.PureComponent {
       term: props.course.term,
       crn: props.course.crn,
       title: props.course.title,
+      loading: false,
+      error: null,
       errors: {
         term: false,
         crn: false,
         title: false
-      },
-      loading: false
+      }
     };
   }
 
@@ -50,7 +66,7 @@ class EditCourseDialog extends React.PureComponent {
 
   editCourse = event => {
     event.preventDefault();
-    this.setState({ loading: true });
+    this.setState({ error: null, loading: true });
     axios
       .put(
         `/api/subscriptions/${this.props.course.id}`,
@@ -66,10 +82,12 @@ class EditCourseDialog extends React.PureComponent {
       .then(response => {
         this.setState({ loading: false });
         this.props.onClose(response);
-      });
+      })
+      .catch(error => this.setState({ loading: false, error }));
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <Dialog
         open
@@ -78,6 +96,13 @@ class EditCourseDialog extends React.PureComponent {
         aria-labelledby="edit-dialog-title"
       >
         {this.state.loading && <DelayedProgress />}
+        {this.state.error && (
+          <Paper className={classes.errorPaper}>
+            <Typography className={classes.errorText} variant="subheading">
+              {this.state.error.toString()}
+            </Typography>
+          </Paper>
+        )}
         <form onSubmit={this.editCourse}>
           <DialogTitle id="edit-dialog-title">Edit course</DialogTitle>
           <DialogContent>
@@ -128,10 +153,11 @@ class EditCourseDialog extends React.PureComponent {
 }
 
 EditCourseDialog.propTypes = {
+  classes: PropTypes.object.isRequired,
   fullScreen: PropTypes.bool,
   onClose: PropTypes.func,
   apiAccessToken: PropTypes.string,
   course: PropTypes.object
 };
 
-export default withMobileDialog()(EditCourseDialog);
+export default withMobileDialog()(withStyles(styles)(EditCourseDialog));

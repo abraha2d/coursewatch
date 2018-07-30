@@ -14,21 +14,37 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   TextField,
-  withMobileDialog
+  Typography,
+  withMobileDialog,
+  withStyles
 } from "@material-ui/core";
 
 import DelayedProgress from "components/DelayedProgress";
+
+const styles = theme => ({
+  errorPaper: {
+    backgroundColor: "#EF5350",
+    padding: `${theme.spacing.unit}px`,
+    margin: `${3 * theme.spacing.unit}px`,
+    marginBottom: 0
+  },
+  errorText: {
+    color: "#FFFFFF"
+  }
+});
 
 class AddCourseDialog extends React.PureComponent {
   state = {
     term: "201809",
     crn: "",
+    loading: false,
+    error: null,
     errors: {
       term: false,
       crn: false
-    },
-    loading: false
+    }
   };
 
   handleChange = name => {
@@ -45,7 +61,7 @@ class AddCourseDialog extends React.PureComponent {
 
   addCourse = event => {
     event.preventDefault();
-    this.setState({ loading: true });
+    this.setState({ error: null, loading: true });
     axios
       .post(
         "/api/subscriptions",
@@ -61,10 +77,12 @@ class AddCourseDialog extends React.PureComponent {
       .then(response => {
         this.setState({ loading: false });
         this.props.onClose(response);
-      });
+      })
+      .catch(error => this.setState({ loading: false, error }));
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <Dialog
         open
@@ -73,6 +91,13 @@ class AddCourseDialog extends React.PureComponent {
         aria-labelledby="add-dialog-title"
       >
         {this.state.loading && <DelayedProgress />}
+        {this.state.error && (
+          <Paper className={classes.errorPaper}>
+            <Typography className={classes.errorText} variant="subheading">
+              {this.state.error.toString()}
+            </Typography>
+          </Paper>
+        )}
         <form onSubmit={this.addCourse}>
           <DialogTitle id="add-dialog-title">Add course</DialogTitle>
           <DialogContent>
@@ -113,9 +138,10 @@ class AddCourseDialog extends React.PureComponent {
 }
 
 AddCourseDialog.propTypes = {
+  classes: PropTypes.object.isRequired,
   fullScreen: PropTypes.bool,
   onClose: PropTypes.func,
   apiAccessToken: PropTypes.string
 };
 
-export default withMobileDialog()(AddCourseDialog);
+export default withMobileDialog()(withStyles(styles)(AddCourseDialog));
