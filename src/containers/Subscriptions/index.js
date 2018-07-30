@@ -15,7 +15,6 @@ import { withStyles } from "@material-ui/core/styles";
 
 import {
   IconButton,
-  LinearProgress,
   List,
   ListItem,
   ListItemIcon,
@@ -28,6 +27,9 @@ import {
 import { Add as AddIcon, Delete as DeleteIcon } from "@material-ui/icons";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
+
+import DelayedProgress from "components/DelayedProgress";
+
 import AddCourseDialog from "components/AddCourseDialog";
 import EditCourseDialog from "components/EditCourseDialog";
 
@@ -114,7 +116,7 @@ class Subscriptions extends React.PureComponent {
       <div>
         <Typography variant="title">Subscriptions</Typography>
         {this.state.loading && (
-          <LinearProgress className={classes.loadingProgress} />
+          <DelayedProgress className={classes.loadingProgress} />
         )}
         {this.state.error && (
           <Paper className={classes.errorPaper}>

@@ -14,10 +14,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  LinearProgress,
   TextField,
   withMobileDialog
 } from "@material-ui/core";
+
+import DelayedProgress from "components/DelayedProgress";
 
 class AddCourseDialog extends React.PureComponent {
   state = {
@@ -71,7 +72,7 @@ class AddCourseDialog extends React.PureComponent {
         fullScreen={this.props.fullScreen}
         aria-labelledby="add-dialog-title"
       >
-        {this.state.loading && <LinearProgress />}
+        {this.state.loading && <DelayedProgress />}
         <form onSubmit={this.addCourse}>
           <DialogTitle id="add-dialog-title">Add course</DialogTitle>
           <DialogContent>
