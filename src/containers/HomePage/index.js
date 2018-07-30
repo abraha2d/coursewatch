@@ -4,6 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
+import UserListItem from "components/UserListItem";
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
@@ -14,12 +15,10 @@ import { withStyles } from "@material-ui/core/styles";
 
 import {
   AppBar,
-  Avatar,
   Divider,
   Drawer,
   Hidden,
   IconButton,
-  ListItem,
   ListItemIcon,
   ListItemText,
   MenuList,
@@ -55,17 +54,15 @@ const styles = theme => ({
     position: "absolute",
     zIndex: theme.zIndex.drawer + 1
   },
+  toolbar: theme.mixins.toolbar,
   navIconHide: {
     [theme.breakpoints.up("md")]: {
       display: "none"
     }
   },
-  logoutAlign: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "flex-end"
+  flex: {
+    flexGrow: 1
   },
-  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: 240,
     [theme.breakpoints.up("md")]: {
@@ -75,7 +72,8 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing.unit * 3,
+    overflow: "auto"
   }
 });
 
@@ -88,10 +86,8 @@ class HomePage extends React.PureComponent {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
 
-  handleNavigate = url => {
-    return () => {
-      this.props.dispatch(push(url));
-    };
+  handleNavigate = url => () => {
+    this.props.dispatch(push(url));
   };
 
   render() {
@@ -101,14 +97,11 @@ class HomePage extends React.PureComponent {
       <div>
         <div className={classes.toolbar} />
         <Divider />
-        <ListItem onClick={this.handleNavigate("/")}>
-          <ListItemIcon>
-            <Avatar src={this.props.auth.user.picture} />
-          </ListItemIcon>
-          <Typography variant="subheading">
-            {this.props.auth.user.name}
-          </Typography>
-        </ListItem>
+        <UserListItem
+          user={this.props.auth.user}
+          onClick={this.handleNavigate("/profile")}
+          selected={this.props.location.pathname === "/profile"}
+        />
         <Divider />
         <MenuList>
           <MenuItem
@@ -137,7 +130,7 @@ class HomePage extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-        <AppBar position="absolute" className={classes.appBar}>
+        <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton
               className={classes.navIconHide}
@@ -146,14 +139,14 @@ class HomePage extends React.PureComponent {
             >
               <MenuIcon />
             </IconButton>
-
-            <Typography variant="title" color="inherit">
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.flex}
+            >
               Coursewatch
             </Typography>
-
-            <div className={classes.logoutAlign}>
-              <LogoutButton variant="outlined" color="inherit" />
-            </div>
+            <LogoutButton variant="outlined" color="inherit" />
           </Toolbar>
         </AppBar>
 
@@ -178,7 +171,6 @@ class HomePage extends React.PureComponent {
         <Hidden smDown>
           <Drawer
             variant="permanent"
-            open
             classes={{
               paper: classes.drawerPaper
             }}
@@ -203,7 +195,6 @@ class HomePage extends React.PureComponent {
 HomePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
   location: PropTypes.object,
   auth: PropTypes.object
 };
@@ -217,6 +208,4 @@ const mapStateToProps = state => {
   return { location, auth };
 };
 
-export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(HomePage)
-);
+export default connect(mapStateToProps)(withStyles(styles)(HomePage));
