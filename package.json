@@ -78,12 +78,5 @@
       "git add"
     ]
   },
-  "proxy": {
-    "/api": {
-      "target": "https://web.coursewatch.sueztech.com",
-      "pathRewrite": {
-        "^/api": "/api"
-      }
-    }
-  }
+  "proxy": "https://web.coursewatch.sueztech.com"
 }
