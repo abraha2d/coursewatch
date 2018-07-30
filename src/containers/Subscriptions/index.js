@@ -14,7 +14,6 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 
 import {
-  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -29,6 +28,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import makeSelectAuth from "containers/LoginPage/selectors";
 
 import DelayedProgress from "components/DelayedProgress";
+import ProgressButton from "components/ProgressButton";
 
 import AddCourseDialog from "components/AddCourseDialog";
 import EditCourseDialog from "components/EditCourseDialog";
@@ -77,7 +77,6 @@ class Subscriptions extends React.PureComponent {
   };
 
   deleteCourse = id => {
-    this.setState({ loading: true });
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
@@ -138,12 +137,12 @@ class Subscriptions extends React.PureComponent {
                   secondary={`CRN: ${course.crn} (Term: ${course.term})`}
                 />
                 <ListItemSecondaryAction>
-                  <IconButton
+                  <ProgressButton
                     aria-label="Delete"
                     onClick={() => this.deleteCourse(course.id)}
                   >
                     <DeleteIcon />
-                  </IconButton>
+                  </ProgressButton>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
