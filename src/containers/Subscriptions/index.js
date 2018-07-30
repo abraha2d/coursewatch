@@ -31,9 +31,7 @@ import {
 
 import makeSelectAuth from "containers/LoginPage/selectors";
 
-import DelayedProgress from "components/DelayedProgress";
 import ProgressButton from "components/ProgressButton";
-
 import AddCourseDialog from "components/AddCourseDialog";
 import EditCourseDialog from "components/EditCourseDialog";
 
@@ -84,7 +82,7 @@ class Subscriptions extends React.PureComponent {
   };
 
   deleteCourse = id => {
-    this.setState({ [`${id}-loading`]: true });
+    this.setState({ error: null, [`${id}-loading`]: true });
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
