@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import SecuredRoute from "containers/SecuredRoute";
 
@@ -18,6 +18,7 @@ export default function App() {
   return (
     <Switch>
       <Route exact path="/login" component={LoginPage} />
+      <Route exact path="///" render={() => <Redirect to="/" />} />
       <SecuredRoute path="/" component={HomePage} />
     </Switch>
   );
