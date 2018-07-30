@@ -59,6 +59,7 @@ const styles = () => ({
 class Subscriptions extends React.PureComponent {
   state = {
     loading: true,
+    deleteLoading: {},
     response: null,
     error: null,
     addCourse: false,
@@ -76,22 +77,29 @@ class Subscriptions extends React.PureComponent {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(response => {
-        this.setState({ loading: false, response });
+        this.setState({ loading: false, deleteLoading: {}, response });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
 
   deleteCourse = id => () => {
-    this.setState({ error: null, [`${id}-loading`]: true });
+    this.setState({
+      error: null,
+      deleteLoading: { ...this.state.deleteLoading, [id]: true }
+    });
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(() => {
-        this.setState({ [`${id}-loading`]: undefined });
         this.refresh();
       })
-      .catch(error => this.setState({ [`${id}-loading`]: undefined, error }));
+      .catch(error =>
+        this.setState({
+          deleteLoading: { ...this.state.deleteLoading, [id]: false },
+          error
+        })
+      );
   };
 
   openAddDialog = () => {
@@ -149,7 +157,7 @@ class Subscriptions extends React.PureComponent {
                   <ProgressButton
                     aria-label="Delete"
                     onClick={this.deleteCourse(course.id)}
-                    loading={this.state[`${course.id}-loading`]}
+                    loading={this.state.deleteLoading[course.id]}
                   >
                     <DeleteIcon />
                   </ProgressButton>
