@@ -6,6 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import { compose } from "redux";
 import axios from "axios";
 
 import {
@@ -158,4 +159,7 @@ EditCourseDialog.propTypes = {
   course: PropTypes.object
 };
 
-export default withMobileDialog()(withStyles(styles)(EditCourseDialog));
+export default compose(
+  withMobileDialog,
+  withStyles(styles)
+)(EditCourseDialog);

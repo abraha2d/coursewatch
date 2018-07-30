@@ -11,8 +11,6 @@ import { createStructuredSelector } from "reselect";
 import { compose } from "redux";
 import axios from "axios";
 
-import { withStyles } from "@material-ui/core/styles";
-
 import {
   List,
   ListItem,
@@ -20,7 +18,8 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Paper,
-  Typography
+  Typography,
+  withStyles
 } from "@material-ui/core";
 
 import {
@@ -205,5 +204,6 @@ const withReducer = injectReducer({ key: "subscriptions", reducer });
 
 export default compose(
   withReducer,
-  withConnect
-)(withStyles(styles)(Subscriptions));
+  withConnect,
+  withStyles(styles)
+)(Subscriptions);

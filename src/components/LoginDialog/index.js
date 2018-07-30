@@ -6,8 +6,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Helmet } from "react-helmet";
+import { compose } from "redux";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 import {
   Button,
@@ -190,6 +191,7 @@ LoginDialog.propTypes = {
   onLogin: PropTypes.func
 };
 
-export default withStyles(styles, { withTheme: true })(
-  withMobileDialog()(LoginDialog)
-);
+export default compose(
+  withMobileDialog,
+  withStyles(styles)
+)(LoginDialog);

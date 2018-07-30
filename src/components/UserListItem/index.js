@@ -4,6 +4,9 @@
  *
  */
 
+import React from "react";
+import PropTypes from "prop-types";
+
 import {
   Avatar,
   ListItemAvatar,
@@ -11,8 +14,6 @@ import {
   MenuItem,
   withStyles
 } from "@material-ui/core";
-import React from "react";
-import PropTypes from "prop-types";
 
 const styles = theme => ({
   userMenuItem: {

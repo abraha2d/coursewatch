@@ -6,8 +6,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import { Redirect, Route } from "react-router-dom";
 
 import makeSelectAuth from "containers/LoginPage/selectors";

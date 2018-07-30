@@ -6,6 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import { compose } from "redux";
 import axios from "axios";
 
 import {
@@ -142,4 +143,7 @@ AddCourseDialog.propTypes = {
   apiAccessToken: PropTypes.string
 };
 
-export default withMobileDialog()(withStyles(styles)(AddCourseDialog));
+export default compose(
+  withMobileDialog,
+  withStyles(styles)
+)(AddCourseDialog);

@@ -93,16 +93,7 @@ const mapStateToProps = createStructuredSelector({
   settings: makeSelectSettings()
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const withConnect = connect(mapStateToProps);
 
 const withReducer = injectReducer({ key: "settings", reducer });
 

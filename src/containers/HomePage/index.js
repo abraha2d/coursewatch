@@ -4,14 +4,12 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import UserListItem from "components/UserListItem";
 import React from "react";
 import PropTypes from "prop-types";
-import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import { Route, Switch } from "react-router-dom";
 import { push } from "connected-react-router/immutable";
-
-import { withStyles } from "@material-ui/core/styles";
 
 import {
   AppBar,
@@ -25,7 +23,8 @@ import {
   MenuItem,
   SwipeableDrawer,
   Toolbar,
-  Typography
+  Typography,
+  withStyles
 } from "@material-ui/core";
 
 import {
@@ -37,8 +36,8 @@ import {
 import Subscriptions from "containers/Subscriptions";
 import Settings from "containers/Settings";
 import NotFoundPage from "containers/NotFoundPage";
-
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
+import UserListItem from "components/UserListItem";
 
 const styles = theme => ({
   root: {
@@ -208,4 +207,9 @@ const mapStateToProps = state => {
   return { location, auth };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(HomePage));
+const withConnect = connect(mapStateToProps);
+
+export default compose(
+  withConnect,
+  withStyles(styles)
+)(HomePage);
