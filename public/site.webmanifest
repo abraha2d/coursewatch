@@ -1,6 +1,6 @@
 {
     "name": "Coursewatch",
-    "short_name": "Coursewatch",
+    "description": "Get an alert within seconds when a seat opens up in a course!",
     "icons": [
         {
             "src": "/android-chrome-192x192.png?v=E6j9W7gNlx",
@@ -14,7 +14,7 @@
         }
     ],
     "theme_color": "#1976d2",
-    "background_color": "#1976d2",
-    "start_url": "./index.html",
+    "background_color": "#ffffff",
+    "start_url": "/",
     "display": "standalone"
 }
