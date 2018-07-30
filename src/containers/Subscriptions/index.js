@@ -128,7 +128,7 @@ class Subscriptions extends React.PureComponent {
           </ProgressButton>
         </div>
         {this.state.loading && (
-          <DelayedProgress className={classes.loadingProgress} />
+          <DelayedProgress className={classes.loadingProgress} delay={1550} />
         )}
         {this.state.error && (
           <Paper className={classes.errorPaper}>

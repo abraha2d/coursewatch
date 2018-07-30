@@ -15,7 +15,10 @@ class DelayedProgress extends React.PureComponent {
   };
 
   componentWillMount() {
-    this.delay = setTimeout(() => this.setState({ showProgress: true }), 100);
+    this.delay = setTimeout(
+      () => this.setState({ showProgress: true }),
+      this.props.delay || 100
+    );
   }
 
   componentWillUnmount() {
@@ -32,7 +35,8 @@ class DelayedProgress extends React.PureComponent {
 }
 
 DelayedProgress.propTypes = {
-  circular: PropTypes.bool
+  circular: PropTypes.bool,
+  delay: PropTypes.number
 };
 
 export default DelayedProgress;
