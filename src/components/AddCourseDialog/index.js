@@ -48,13 +48,13 @@ class AddCourseDialog extends React.PureComponent {
   };
 
   handleChange = name => event => {
-    this.setState({
+    this.setState(prevState => ({
       [name]: event.target.value,
       errors: {
-        ...this.state.errors,
+        ...prevState.errors,
         [name]: false
       }
-    });
+    }));
   };
 
   addCourse = event => {

@@ -83,10 +83,10 @@ class Subscriptions extends React.PureComponent {
   };
 
   deleteCourse = id => () => {
-    this.setState({
+    this.setState(prevState => ({
       error: null,
-      deleteLoading: { ...this.state.deleteLoading, [id]: true }
-    });
+      deleteLoading: { ...prevState.deleteLoading, [id]: true }
+    }));
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
@@ -95,10 +95,10 @@ class Subscriptions extends React.PureComponent {
         this.refresh();
       })
       .catch(error =>
-        this.setState({
-          deleteLoading: { ...this.state.deleteLoading, [id]: false },
+        this.setState(prevState => ({
+          deleteLoading: { ...prevState.deleteLoading, [id]: false },
           error
-        })
+        }))
       );
   };
 
