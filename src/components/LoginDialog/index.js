@@ -192,6 +192,6 @@ LoginDialog.propTypes = {
 };
 
 export default compose(
-  withMobileDialog,
+  withMobileDialog(),
   withStyles(styles)
 )(LoginDialog);

@@ -144,6 +144,6 @@ AddCourseDialog.propTypes = {
 };
 
 export default compose(
-  withMobileDialog,
+  withMobileDialog(),
   withStyles(styles)
 )(AddCourseDialog);
