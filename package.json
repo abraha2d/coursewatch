@@ -80,9 +80,9 @@
   },
   "proxy": {
     "/api": {
-      "target": "http://localhost:9000",
+      "target": "https://web.coursewatch.sueztech.com",
       "pathRewrite": {
-        "^/api/": "/"
+        "^/api": "/api"
       }
     }
   }
