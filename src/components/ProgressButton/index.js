@@ -28,7 +28,7 @@ function ProgressButton(props) {
   const { classes, onClick, loading, children, ...rest } = props;
   return (
     <div className={classes.wrapper}>
-      <IconButton onClick={onClick} {...rest}>
+      <IconButton onClick={onClick} disabled={loading} {...rest}>
         {children}
       </IconButton>
       {loading && (
