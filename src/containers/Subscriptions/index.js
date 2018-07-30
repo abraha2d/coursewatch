@@ -51,7 +51,6 @@ const styles = () => ({
   },
   errorPaper: {
     backgroundColor: "#EF5350",
-    marginTop: "10px",
     padding: "10px"
   },
   errorText: {
@@ -79,9 +78,9 @@ class Subscriptions extends React.PureComponent {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(response => {
-        this.setState({ response, loading: false });
+        this.setState({ loading: false, response });
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ loading: false, error }));
   };
 
   deleteCourse = id => {
