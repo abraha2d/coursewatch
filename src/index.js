@@ -8,15 +8,27 @@ import App from "containers/App";
 import configureStore from "./configureStore";
 import registerServiceWorker from "./registerServiceWorker";
 
-import { CssBaseline } from "@material-ui/core";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import {
+  CssBaseline,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core";
 
 // Create redux store with history
 const initialState = {};
 const history = createHistory({});
 const store = configureStore(initialState, history);
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#1976d2"
+    },
+    secondary: {
+      main: "#c2185b"
+    }
+  }
+});
 
 ReactDOM.render(
   <Provider store={store}>
