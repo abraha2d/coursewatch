@@ -84,14 +84,16 @@ class Subscriptions extends React.PureComponent {
   };
 
   deleteCourse = id => {
+    this.setState({ [`${id}-loading`]: true });
     axios
       .delete(`/api/subscriptions/${id}`, {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(() => {
+        this.setState({ [`${id}-loading`]: undefined });
         this.refresh();
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ [`${id}-loading`]: undefined, error }));
   };
 
   openAddDialog = () => {
@@ -152,6 +154,7 @@ class Subscriptions extends React.PureComponent {
                   <ProgressButton
                     aria-label="Delete"
                     onClick={() => this.deleteCourse(course.id)}
+                    loading={this.state[`${course.id}-loading`]}
                   >
                     <DeleteIcon />
                   </ProgressButton>

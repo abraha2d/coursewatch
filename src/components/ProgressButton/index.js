@@ -24,50 +24,29 @@ const styles = theme => ({
   }
 });
 
-class ProgressButton extends React.PureComponent {
-  state = {
-    loading: false
-  };
-
-  componentWillUnmount() {
-    clearTimeout(this.delay);
-  }
-
-  handleClick = () => {
-    this.setState({ loading: true });
-    if (this.props.resetAfterOne) {
-      this.delay = setTimeout(() => {
-        this.setState({ loading: false });
-      }, 1550);
-    }
-    this.props.onClick();
-  };
-
-  render() {
-    // noinspection JSUnusedLocalSymbols
-    const { classes, onClick, resetAfterOne, ...rest } = this.props;
-    return (
-      <div className={classes.wrapper}>
-        <IconButton onClick={this.handleClick} {...rest}>
-          {this.props.children}
-        </IconButton>
-        {this.state.loading && (
-          <DelayedProgress
-            circular
-            variant="indeterminate"
-            size={48}
-            className={classes.progress}
-          />
-        )}
-      </div>
-    );
-  }
+function ProgressButton(props) {
+  const { classes, onClick, loading, children, ...rest } = props;
+  return (
+    <div className={classes.wrapper}>
+      <IconButton onClick={onClick} {...rest}>
+        {children}
+      </IconButton>
+      {loading && (
+        <DelayedProgress
+          circular
+          variant="indeterminate"
+          size={48}
+          className={classes.progress}
+        />
+      )}
+    </div>
+  );
 }
 
 ProgressButton.propTypes = {
   classes: PropTypes.object.isRequired,
   onClick: PropTypes.func,
-  resetAfterOne: PropTypes.bool
+  loading: PropTypes.bool
 };
 
 export default withStyles(styles)(ProgressButton);
