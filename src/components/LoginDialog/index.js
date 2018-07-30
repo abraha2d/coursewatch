@@ -9,8 +9,6 @@ import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 
-import logo from "images/logo.png";
-
 import {
   Button,
   Dialog,
@@ -21,7 +19,12 @@ import {
   withMobileDialog,
   withStyles
 } from "@material-ui/core";
+
+import DelayedProgress from "components/DelayedProgress";
+
 import { loadAuth2 } from "./utils";
+
+import logo from "images/logo.png";
 
 const styles = theme => ({
   headerImage: {
@@ -47,14 +50,12 @@ const styles = theme => ({
 });
 
 class LoginDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      error: false
-    };
-  }
+  state = {
+    username: "",
+    password: "",
+    loading: false,
+    error: false
+  };
 
   componentWillMount() {
     window.handleGoogleSignIn = this.handleGoogleSignIn;
@@ -85,7 +86,8 @@ class LoginDialog extends React.Component {
     };
   };
 
-  auth = (apiURL, access_token, sendAuth) =>
+  auth = (apiURL, access_token, sendAuth) => {
+    this.setState({ loading: true });
     axios
       .post(
         apiURL,
@@ -100,9 +102,11 @@ class LoginDialog extends React.Component {
           : {}
       )
       .then(response => {
+        this.setState({ loading: false });
         this.props.onLogin(response.data);
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ loading: false, error }));
+  };
 
   handleSignIn = event => {
     event.preventDefault();
@@ -123,6 +127,9 @@ class LoginDialog extends React.Component {
         <Helmet>
           <script src="https://apis.google.com/js/platform.js?onload=handleGoogleInitLoginDialog" />
         </Helmet>
+
+        {this.state.loading && <DelayedProgress />}
+
         <form onSubmit={this.handleSignIn}>
           <DialogTitle id="form-dialog-title">
             <img
@@ -131,6 +138,7 @@ class LoginDialog extends React.Component {
               alt="Coursewatch Login"
             />
           </DialogTitle>
+
           <DialogContent>
             <TextField
               id="username"
@@ -160,6 +168,7 @@ class LoginDialog extends React.Component {
             <div className={this.props.classes.orSpan}>– or –</div>
             <div id="googleLogin" className={this.props.classes.googleLogin} />
           </DialogContent>
+
           <DialogActions>
             <Button>Forgot Password?</Button>
             <Button

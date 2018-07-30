@@ -21,11 +21,7 @@ export class ConnectedLogoutButton extends React.PureComponent {
   render() {
     // noinspection JSUnusedLocalSymbols
     const { dispatch, ...rest } = this.props;
-    return (
-      <LogoutButton onLogout={this.handleLogout} {...rest}>
-        Logout
-      </LogoutButton>
-    );
+    return <LogoutButton onLogout={this.handleLogout} {...rest} />;
   }
 }
 
