@@ -15,11 +15,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  InputLabel,
   MenuItem,
   Paper,
-  Select as MuiSelect,
+  TextField,
   Typography,
   withMobileDialog,
   withStyles
@@ -166,48 +164,40 @@ class AddCourseDialog extends React.PureComponent {
         <form onSubmit={this.addCourse}>
           <DialogTitle id="add-dialog-title">Add course</DialogTitle>
           <DialogContent>
-            <FormControl
-              disabled={this.state.responses.colleges === null}
+            <TextField
+              select
+              label="College"
               required
               fullWidth
               margin="dense"
+              value={this.state.college}
+              onChange={event =>
+                this.handleChange("college")(event.target.value)
+              }
+              disabled={this.state.responses.colleges === null}
               error={this.state.errors.college !== false}
             >
-              <InputLabel htmlFor="college">College</InputLabel>
-              <MuiSelect
-                value={this.state.college}
-                onChange={event =>
-                  this.handleChange("college")(event.target.value)
-                }
-                inputProps={{ name: "college", id: "college" }}
-              >
-                {this.state.responses.colleges &&
-                  this.state.responses.colleges.map(college => (
-                    <MenuItem value={college.id}>{college.name}</MenuItem>
-                  ))}
-              </MuiSelect>
-            </FormControl>
-            <FormControl
-              disabled={this.state.responses.terms === null}
+              {this.state.responses.colleges &&
+                this.state.responses.colleges.map(college => (
+                  <MenuItem value={college.id}>{college.name}</MenuItem>
+                ))}
+            </TextField>
+            <TextField
+              select
+              label="Term"
               required
               fullWidth
               margin="dense"
+              value={this.state.term}
+              onChange={event => this.handleChange("term")(event.target.value)}
+              disabled={this.state.responses.terms === null}
               error={this.state.errors.term !== false}
             >
-              <InputLabel htmlFor="term">Term</InputLabel>
-              <MuiSelect
-                value={this.state.term}
-                onChange={event =>
-                  this.handleChange("term")(event.target.value)
-                }
-                inputProps={{ name: "term", id: "term" }}
-              >
-                {this.state.responses.terms &&
-                  this.state.responses.terms.map(term => (
-                    <MenuItem value={term.id}>{term.name}</MenuItem>
-                  ))}
-              </MuiSelect>
-            </FormControl>
+              {this.state.responses.terms &&
+                this.state.responses.terms.map(term => (
+                  <MenuItem value={term.id}>{term.name}</MenuItem>
+                ))}
+            </TextField>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => this.props.onClose()} color="primary">
