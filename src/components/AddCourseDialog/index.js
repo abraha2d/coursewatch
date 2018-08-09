@@ -134,18 +134,43 @@ class AddCourseDialog extends React.PureComponent {
       .catch(error => this.setState({ loading: false, error }));
   };
 
+  addCourse = crn => {
+    this.setState({ error: null, loading: true });
+    return axios
+      .post(
+        "/api/courses",
+        { term: this.state.term, crn },
+        { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
+      )
+      .then(() => {
+        this.setState({ loading: false });
+      })
+      .catch(error => this.setState({ loading: false, error }));
+  };
+
   // noinspection JSUnresolvedVariable
   getCourseValue = course =>
     `${course.crn} - ${course.subject} ${course.number} ${course.section}`;
 
-  getSuggestions = input =>
-    this.state.responses.courses.filter(course => {
+  getSuggestions = input => {
+    const suggestions = this.state.responses.courses.filter(course => {
       return this.getCourseValue(course)
         .toLowerCase()
         .includes(input.toLowerCase());
     });
+    if (
+      suggestions.length === 0 &&
+      input.length === 5 &&
+      Number(input).toString() === input
+    ) {
+      this.addCourse(input).then(() => {
+        this.getCourses(this.state.term);
+      });
+    }
+    return suggestions;
+  };
 
-  addCourse = event => {
+  addSubscription = event => {
     event.preventDefault();
     if (this.state.courseId === "") {
       return;
@@ -185,7 +210,7 @@ class AddCourseDialog extends React.PureComponent {
             </Typography>
           </Paper>
         )}
-        <form onSubmit={this.addCourse}>
+        <form onSubmit={this.addSubscription}>
           <DialogTitle id="add-dialog-title">Add course</DialogTitle>
           <DialogContent>
             <TextField
@@ -255,6 +280,7 @@ class AddCourseDialog extends React.PureComponent {
                 return (
                   <TextField
                     label="Course"
+                    helperText="Type CRN to import course from Banner"
                     required
                     fullWidth
                     margin="dense"
