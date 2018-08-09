@@ -152,23 +152,12 @@ class AddCourseDialog extends React.PureComponent {
   getCourseValue = course =>
     `${course.crn} - ${course.subject} ${course.number} ${course.section}`;
 
-  getSuggestions = input => {
-    const suggestions = this.state.responses.courses.filter(course => {
+  getSuggestions = input =>
+    this.state.responses.courses.filter(course => {
       return this.getCourseValue(course)
         .toLowerCase()
         .includes(input.toLowerCase());
     });
-    if (
-      suggestions.length === 0 &&
-      input.length === 5 &&
-      Number(input).toString() === input
-    ) {
-      this.addCourse(input).then(() => {
-        this.getCourses(this.state.term);
-      });
-    }
-    return suggestions;
-  };
 
   addSubscription = event => {
     event.preventDefault();
@@ -251,10 +240,18 @@ class AddCourseDialog extends React.PureComponent {
             </TextField>
             <Autosuggest
               suggestions={this.state.suggestions}
-              onSuggestionsFetchRequested={({ value }) => {
-                this.setState({
-                  suggestions: this.getSuggestions(value)
-                });
+              onSuggestionsFetchRequested={({ value: input }) => {
+                const suggestions = this.getSuggestions(input);
+                this.setState({ suggestions });
+                if (
+                  suggestions.length === 0 &&
+                  input.length === 5 &&
+                  Number(input).toString() === input
+                ) {
+                  this.addCourse(input).then(() => {
+                    this.getCourses(this.state.term);
+                  });
+                }
               }}
               onSuggestionsClearRequested={() => {}}
               getSuggestionValue={this.getCourseValue}
