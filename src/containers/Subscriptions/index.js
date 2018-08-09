@@ -12,6 +12,7 @@ import { compose } from "redux";
 import axios from "axios";
 
 import {
+  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -53,8 +54,8 @@ const styles = theme => ({
   errorText: {
     color: "#FFFFFF"
   },
-  seatPadding: {
-    paddingRight: `${8 * theme.spacing.unit}px`
+  secondaryActions: {
+    display: "flex"
   }
 });
 
@@ -163,12 +164,24 @@ class Subscriptions extends React.PureComponent {
                   }`}
                   secondary={subscription.course.title}
                 />
-                <Typography variant="headline" className={classes.seatPadding}>
-                  {subscription.course.availability.remaining}/{
-                    subscription.course.availability.capacity
-                  }
-                </Typography>
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction className={classes.secondaryActions}>
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        `${
+                          subscription.course.term.college.url
+                        }/bwckschd.p_disp_detail_sched?term_in=${
+                          subscription.course.term.yyyymm
+                        }&crn_in=${subscription.course.crn}`
+                      )
+                    }
+                  >
+                    <Typography component="a" variant="headline">
+                      {subscription.course.availability.remaining}/{
+                        subscription.course.availability.capacity
+                      }
+                    </Typography>
+                  </Button>
                   <ProgressButton
                     aria-label="Delete"
                     onClick={this.deleteSubscription(subscription.id)}
