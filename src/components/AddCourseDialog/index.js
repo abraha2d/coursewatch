@@ -129,7 +129,7 @@ class AddCourseDialog extends React.PureComponent {
           loading: false,
           responses: { ...prevState.responses, courses: response.data }
         }));
-        this.setState({ suggestions: this.getSuggestions("") });
+        this.setState({ suggestions: this.getSuggestions(this.state.course) });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
