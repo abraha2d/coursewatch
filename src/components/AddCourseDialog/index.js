@@ -8,6 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
 import axios from "axios";
+import Autosuggest from "react-autosuggest";
 
 import {
   Button,
@@ -15,6 +16,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItemText,
   MenuItem,
   Paper,
   TextField,
@@ -48,6 +50,8 @@ class AddCourseDialog extends React.PureComponent {
       terms: null,
       courses: null
     },
+    suggestions: [],
+    courseId: "",
     error: null,
     errors: {
       college: false,
@@ -56,7 +60,8 @@ class AddCourseDialog extends React.PureComponent {
     }
   };
 
-  handleChange = name => value => {
+  handleChange = name => (event, nvm) => {
+    const value = nvm ? nvm.newValue : event.target.value;
     this.setState(prevState => ({
       [name]: value,
       errors: {
@@ -120,17 +125,32 @@ class AddCourseDialog extends React.PureComponent {
           loading: false,
           responses: { ...prevState.responses, courses: response.data }
         }));
+        this.setState({ suggestions: this.getSuggestions("") });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
 
+  // noinspection JSUnresolvedVariable
+  getCourseValue = course =>
+    `${course.crn} - ${course.subject} ${course.number} ${course.section}`;
+
+  getSuggestions = input =>
+    this.state.responses.courses.filter(course => {
+      return this.getCourseValue(course)
+        .toLowerCase()
+        .includes(input.toLowerCase());
+    });
+
   addCourse = event => {
     event.preventDefault();
+    if (this.state.courseId === "") {
+      return;
+    }
     this.setState({ error: null, loading: true });
     axios
       .post(
         "/api/subscriptions",
-        { course: this.state.course },
+        { course: this.state.courseId },
         { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
       )
       .then(response => {
@@ -171,15 +191,15 @@ class AddCourseDialog extends React.PureComponent {
               fullWidth
               margin="dense"
               value={this.state.college}
-              onChange={event =>
-                this.handleChange("college")(event.target.value)
-              }
+              onChange={this.handleChange("college")}
               disabled={this.state.responses.colleges === null}
               error={this.state.errors.college !== false}
             >
               {this.state.responses.colleges &&
                 this.state.responses.colleges.map(college => (
-                  <MenuItem value={college.id}>{college.name}</MenuItem>
+                  <MenuItem key={college.id} value={college.id}>
+                    {college.name}
+                  </MenuItem>
                 ))}
             </TextField>
             <TextField
@@ -189,15 +209,60 @@ class AddCourseDialog extends React.PureComponent {
               fullWidth
               margin="dense"
               value={this.state.term}
-              onChange={event => this.handleChange("term")(event.target.value)}
+              onChange={this.handleChange("term")}
               disabled={this.state.responses.terms === null}
               error={this.state.errors.term !== false}
             >
               {this.state.responses.terms &&
                 this.state.responses.terms.map(term => (
-                  <MenuItem value={term.id}>{term.name}</MenuItem>
+                  <MenuItem key={term.id} value={term.id}>
+                    {term.name}
+                  </MenuItem>
                 ))}
             </TextField>
+            <Autosuggest
+              suggestions={this.state.suggestions}
+              onSuggestionsFetchRequested={({ value }) => {
+                this.setState({
+                  suggestions: this.getSuggestions(value)
+                });
+              }}
+              onSuggestionsClearRequested={() => {}}
+              getSuggestionValue={this.getCourseValue}
+              renderSuggestion={(course, { query, isHighlighted }) => (
+                <MenuItem selected={isHighlighted}>
+                  <ListItemText
+                    primary={this.getCourseValue(course)}
+                    secondary={course.title}
+                  />
+                </MenuItem>
+              )}
+              inputProps={{
+                value: this.state.course,
+                onChange: this.handleChange("course")
+              }}
+              onSuggestionSelected={(event, { suggestion }) => {
+                this.setState({ courseId: suggestion.id });
+              }}
+              alwaysRenderSuggestions
+              highlightFirstSuggestion
+              renderInputComponent={inputProps => {
+                const { value, onChange, ...rest } = inputProps;
+                return (
+                  <TextField
+                    label="Course"
+                    required
+                    fullWidth
+                    margin="dense"
+                    value={value}
+                    onChange={onChange}
+                    disabled={this.state.responses.courses === null}
+                    error={this.state.errors.course !== false}
+                    inputProps={rest}
+                  />
+                );
+              }}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => this.props.onClose()} color="primary">
