@@ -16,6 +16,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItemSecondaryAction,
   ListItemText,
   MenuItem,
   Paper,
@@ -184,6 +185,7 @@ class AddCourseDialog extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
+    // noinspection JSUnresolvedVariable
     return (
       <Dialog
         open
@@ -261,6 +263,25 @@ class AddCourseDialog extends React.PureComponent {
                     primary={this.getCourseValue(course)}
                     secondary={course.title}
                   />
+                  <ListItemSecondaryAction className={classes.secondaryActions}>
+                    <Button
+                      onClick={() =>
+                        window.open(
+                          `${
+                            course.term.college.url
+                          }/bwckschd.p_disp_detail_sched?term_in=${
+                            course.term.yyyymm
+                          }&crn_in=${course.crn}`
+                        )
+                      }
+                    >
+                      <Typography component="a" variant="headline">
+                        {course.availability.remaining}/{
+                          course.availability.capacity
+                        }
+                      </Typography>
+                    </Button>
+                  </ListItemSecondaryAction>
                 </MenuItem>
               )}
               inputProps={{
