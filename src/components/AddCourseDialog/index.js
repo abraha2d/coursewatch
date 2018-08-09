@@ -70,8 +70,10 @@ class AddCourseDialog extends React.PureComponent {
       }
     }));
     if (name === "college") {
+      this.setState({ term: "", course: "", courseId: "" });
       this.getTerms(value);
     } else if (name === "term") {
+      this.setState({ course: "", courseId: "" });
       this.getCourses(value);
     }
   };
@@ -80,9 +82,10 @@ class AddCourseDialog extends React.PureComponent {
     this.setState(prevState => ({
       error: null,
       loading: true,
-      responses: { ...prevState.responses, terms: null, courses: null }
+      responses: { ...prevState.responses, terms: null, courses: null },
+      suggestions: []
     }));
-    axios
+    return axios
       .get("/api/colleges", {
         headers: { Authorization: `Bearer ${this.props.apiAccessToken}` }
       })
@@ -99,9 +102,10 @@ class AddCourseDialog extends React.PureComponent {
     this.setState(prevState => ({
       error: null,
       loading: true,
-      responses: { ...prevState.responses, courses: null }
+      responses: { ...prevState.responses, courses: null },
+      suggestions: []
     }));
-    axios
+    return axios
       .get(`/api/terms?college=${college}`, {
         headers: { Authorization: `Bearer ${this.props.apiAccessToken}` }
       })

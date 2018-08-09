@@ -186,7 +186,7 @@ class Subscriptions extends React.PureComponent {
           <EditCourseDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleEditDialogClose}
-            course={this.state.editSubscription}
+            subscription={this.state.editSubscription}
           />
         )}
       </div>
