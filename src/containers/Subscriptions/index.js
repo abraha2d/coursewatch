@@ -59,10 +59,10 @@ class Subscriptions extends React.PureComponent {
   state = {
     loading: true,
     deleteLoading: {},
-    response: null,
+    subscriptions: null,
     error: null,
-    addCourse: false,
-    editCourse: null
+    addSubscription: false,
+    editSubscription: null
   };
 
   componentWillMount() {
@@ -76,12 +76,16 @@ class Subscriptions extends React.PureComponent {
         headers: { Authorization: `Bearer ${this.props.auth.token}` }
       })
       .then(response => {
-        this.setState({ loading: false, deleteLoading: {}, response });
+        this.setState({
+          loading: false,
+          deleteLoading: {},
+          subscriptions: response.data
+        });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
 
-  deleteCourse = id => () => {
+  deleteSubscription = id => () => {
     this.setState(prevState => ({
       error: null,
       deleteLoading: { ...prevState.deleteLoading, [id]: true }
@@ -102,22 +106,22 @@ class Subscriptions extends React.PureComponent {
   };
 
   openAddDialog = () => {
-    this.setState({ addCourse: true });
+    this.setState({ addSubscription: true });
   };
 
   handleAddDialogClose = response => {
-    this.setState({ addCourse: false });
+    this.setState({ addSubscription: false });
     if (response) {
       this.refresh();
     }
   };
 
   openEditDialog = course => () => {
-    this.setState({ editCourse: course });
+    this.setState({ editSubscription: course });
   };
 
   handleEditDialogClose = response => {
-    this.setState({ editCourse: null });
+    this.setState({ editSubscription: null });
     if (response) {
       this.refresh();
     }
@@ -141,22 +145,24 @@ class Subscriptions extends React.PureComponent {
           </Paper>
         )}
         <List>
-          {this.state.response &&
-            this.state.response.data.map(course => (
+          {this.state.subscriptions &&
+            this.state.subscriptions.map(subscription => (
               <ListItem
                 button
-                key={course.id}
-                onClick={this.openEditDialog(course)}
+                key={subscription.id}
+                onClick={this.openEditDialog(subscription)}
               >
                 <ListItemText
-                  primary={course.title}
-                  secondary={`CRN: ${course.crn} (Term: ${course.term})`}
+                  primary={subscription.course.title}
+                  secondary={`CRN: ${subscription.course.crn} (Term: ${
+                    subscription.course.term.name
+                  })`}
                 />
                 <ListItemSecondaryAction>
                   <ProgressButton
                     aria-label="Delete"
-                    onClick={this.deleteCourse(course.id)}
-                    loading={this.state.deleteLoading[course.id]}
+                    onClick={this.deleteSubscription(subscription.id)}
+                    loading={this.state.deleteLoading[subscription.id]}
                   >
                     <DeleteIcon />
                   </ProgressButton>
@@ -167,20 +173,20 @@ class Subscriptions extends React.PureComponent {
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
-            <ListItemText primary="Add a course..." />
+            <ListItemText primary="Add a subscription..." />
           </ListItem>
         </List>
-        {this.state.addCourse && (
+        {this.state.addSubscription && (
           <AddCourseDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleAddDialogClose}
           />
         )}
-        {this.state.editCourse != null && (
+        {this.state.editSubscription != null && (
           <EditCourseDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleEditDialogClose}
-            course={this.state.editCourse}
+            subscription={this.state.editSubscription}
           />
         )}
       </div>

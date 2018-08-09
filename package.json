@@ -1,6 +1,6 @@
 {
   "name": "coursewatch",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.1",
   "homepage": "https://web.coursewatch.sueztech.com",
   "bugs": "https://github.com/abraha2d/coursewatch/issues",
   "license": "UNLICENSED",
@@ -33,6 +33,7 @@
     "lodash": "^4.17.10",
     "prop-types": "*",
     "react": "^16.4.1",
+    "react-autosuggest": "^9.3.4",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "react-redux": "^5.0.7",
@@ -78,5 +79,12 @@
       "git add"
     ]
   },
-  "proxy": "https://web.coursewatch.sueztech.com"
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:9000",
+      "pathRewrite": {
+        "^/api/": "/"
+      }
+    }
+  }
 }

@@ -51,7 +51,9 @@ if (module.hot) {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <CssBaseline>
-            <App />
+            <MuiThemeProvider theme={theme}>
+              <App />
+            </MuiThemeProvider>
           </CssBaseline>
         </ConnectedRouter>
       </Provider>,
