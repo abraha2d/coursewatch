@@ -38,7 +38,7 @@ import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
 import reducer from "./reducer";
 
-const styles = () => ({
+const styles = theme => ({
   headerDiv: {
     display: "flex",
     alignItems: "center"
@@ -52,6 +52,9 @@ const styles = () => ({
   },
   errorText: {
     color: "#FFFFFF"
+  },
+  seatPadding: {
+    paddingRight: `${8 * theme.spacing.unit}px`
   }
 });
 
@@ -153,11 +156,18 @@ class Subscriptions extends React.PureComponent {
                 onClick={this.openEditDialog(subscription)}
               >
                 <ListItemText
-                  primary={subscription.course.title}
-                  secondary={`CRN: ${subscription.course.crn} (Term: ${
-                    subscription.course.term.name
-                  })`}
+                  primary={`${subscription.course.crn} - ${
+                    subscription.course.subject
+                  } ${subscription.course.number} ${
+                    subscription.course.section
+                  }`}
+                  secondary={subscription.course.title}
                 />
+                <Typography variant="headline" className={classes.seatPadding}>
+                  {subscription.course.availability.remaining}/{
+                    subscription.course.availability.capacity
+                  }
+                </Typography>
                 <ListItemSecondaryAction>
                   <ProgressButton
                     aria-label="Delete"
