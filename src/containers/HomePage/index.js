@@ -37,7 +37,7 @@ import {
 import makeSelectAuth from "containers/LoginPage/selectors";
 
 import Subscriptions from "containers/Subscriptions";
-import { ProfilePage } from "containers/ProfilePage";
+import ProfilePage from "containers/ProfilePage";
 import Settings from "containers/Settings";
 import NotFoundPage from "containers/NotFoundPage";
 
