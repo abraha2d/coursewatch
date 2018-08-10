@@ -1,6 +1,6 @@
 /**
  *
- * EditCourseDialog
+ * SubscriptionDialog
  *
  */
 
@@ -16,6 +16,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItemSecondaryAction,
   ListItemText,
   MenuItem,
   Paper,
@@ -39,13 +40,15 @@ const styles = theme => ({
   }
 });
 
-class EditCourseDialog extends React.PureComponent {
+class SubscriptionDialog extends React.PureComponent {
   constructor(props) {
     super(props);
+    const { subscription } = props;
     this.state = {
-      college: props.subscription.course.term.college.id,
-      term: props.subscription.course.term.id,
-      course: this.getCourseValue(props.subscription.course),
+      college: subscription ? subscription.course.term.college.id : "",
+      term: subscription ? subscription.course.term.id : "",
+      course: subscription ? this.getCourseValue(subscription.course) : "",
+      courseId: subscription ? subscription.course.id : "",
       loading: false,
       responses: {
         colleges: null,
@@ -53,7 +56,6 @@ class EditCourseDialog extends React.PureComponent {
         courses: null
       },
       suggestions: [],
-      courseId: props.subscription.course.id,
       error: null,
       errors: {
         college: false,
@@ -61,6 +63,12 @@ class EditCourseDialog extends React.PureComponent {
         course: false
       }
     };
+  }
+
+  componentWillMount() {
+    this.getColleges()
+      .then(() => this.getTerms(this.state.college))
+      .then(() => this.getCourses(this.state.term));
   }
 
   handleChange = name => (event, nvm) => {
@@ -78,16 +86,18 @@ class EditCourseDialog extends React.PureComponent {
     } else if (name === "term") {
       this.setState({ course: "", courseId: "" });
       this.getCourses(value);
+    } else if (name === "course") {
+      this.setState({ courseId: "" });
     }
   };
 
   getColleges = () => {
-    this.setState(prevState => ({
+    this.setState({
       error: null,
       loading: true,
-      responses: { ...prevState.responses, terms: null, courses: null },
+      responses: { colleges: null, terms: null, courses: null },
       suggestions: []
-    }));
+    });
     return axios
       .get("/api/colleges", {
         headers: { Authorization: `Bearer ${this.props.apiAccessToken}` }
@@ -102,10 +112,11 @@ class EditCourseDialog extends React.PureComponent {
   };
 
   getTerms = college => {
+    if (college === "") return;
     this.setState(prevState => ({
       error: null,
       loading: true,
-      responses: { ...prevState.responses, courses: null },
+      responses: { ...prevState.responses, terms: null, courses: null },
       suggestions: []
     }));
     return axios
@@ -122,7 +133,12 @@ class EditCourseDialog extends React.PureComponent {
   };
 
   getCourses = term => {
-    this.setState({ error: null, loading: true });
+    if (term === "") return;
+    this.setState({
+      error: null,
+      loading: true,
+      suggestions: []
+    });
     return axios
       .get(`/api/courses?term=${term}`, {
         headers: { Authorization: `Bearer ${this.props.apiAccessToken}` }
@@ -133,6 +149,20 @@ class EditCourseDialog extends React.PureComponent {
           responses: { ...prevState.responses, courses: response.data }
         }));
         this.setState({ suggestions: this.getSuggestions(this.state.course) });
+      })
+      .catch(error => this.setState({ loading: false, error }));
+  };
+
+  addCourse = crn => {
+    this.setState({ error: null, loading: true, suggestions: [] });
+    return axios
+      .post(
+        "/api/courses",
+        { term: this.state.term, crn },
+        { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
+      )
+      .then(() => {
+        this.setState({ loading: false });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
@@ -148,18 +178,27 @@ class EditCourseDialog extends React.PureComponent {
         .includes(input.toLowerCase());
     });
 
-  editCourse = event => {
+  doSubscription = event => {
     event.preventDefault();
     if (this.state.courseId === "") {
       return;
     }
     this.setState({ error: null, loading: true });
-    axios
-      .put(
+    let req = null;
+    if (this.props.subscription) {
+      req = axios.put(
         `/api/subscriptions/${this.props.subscription.id}`,
         { course: this.state.courseId },
         { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
-      )
+      );
+    } else {
+      req = axios.post(
+        "/api/subscriptions",
+        { course: this.state.courseId },
+        { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
+      );
+    }
+    req
       .then(response => {
         this.setState({ loading: false });
         this.props.onClose(response);
@@ -167,20 +206,15 @@ class EditCourseDialog extends React.PureComponent {
       .catch(error => this.setState({ loading: false, error }));
   };
 
-  componentWillMount() {
-    this.getColleges()
-      .then(() => this.getTerms(this.state.college))
-      .then(() => this.getCourses(this.state.term));
-  }
-
   render() {
-    const { classes } = this.props;
+    const { classes, subscription } = this.props;
+    // noinspection JSUnresolvedVariable
     return (
       <Dialog
         open
         onClose={() => this.props.onClose()}
         fullScreen={this.props.fullScreen}
-        aria-labelledby="edit-dialog-title"
+        aria-labelledby="dialog-title"
       >
         {this.state.loading && <DelayedProgress />}
         {this.state.error && (
@@ -190,8 +224,10 @@ class EditCourseDialog extends React.PureComponent {
             </Typography>
           </Paper>
         )}
-        <form onSubmit={this.editCourse}>
-          <DialogTitle id="edit-dialog-title">Edit course</DialogTitle>
+        <form onSubmit={this.doSubscription}>
+          <DialogTitle id="dialog-title">
+            {subscription ? "Edit" : "Add"} subscription
+          </DialogTitle>
           <DialogContent>
             <TextField
               select
@@ -232,9 +268,17 @@ class EditCourseDialog extends React.PureComponent {
             <Autosuggest
               suggestions={this.state.suggestions}
               onSuggestionsFetchRequested={({ value }) => {
-                this.setState({
-                  suggestions: this.getSuggestions(value)
-                });
+                const suggestions = this.getSuggestions(value);
+                this.setState({ suggestions });
+                if (
+                  suggestions.length === 0 &&
+                  value.length === 5 &&
+                  Number(value).toString() === value
+                ) {
+                  this.addCourse(value).then(() => {
+                    this.getCourses(this.state.term);
+                  });
+                }
               }}
               onSuggestionsClearRequested={() => {}}
               getSuggestionValue={this.getCourseValue}
@@ -244,6 +288,25 @@ class EditCourseDialog extends React.PureComponent {
                     primary={this.getCourseValue(course)}
                     secondary={course.title}
                   />
+                  <ListItemSecondaryAction className={classes.secondaryActions}>
+                    <Button
+                      onClick={() =>
+                        window.open(
+                          `${
+                            course.term.college.url
+                          }/bwckschd.p_disp_detail_sched?term_in=${
+                            course.term.yyyymm
+                          }&crn_in=${course.crn}`
+                        )
+                      }
+                    >
+                      <Typography variant="headline">
+                        {course.availability.remaining}/{
+                          course.availability.capacity
+                        }
+                      </Typography>
+                    </Button>
+                  </ListItemSecondaryAction>
                 </MenuItem>
               )}
               inputProps={{
@@ -260,6 +323,7 @@ class EditCourseDialog extends React.PureComponent {
                 return (
                   <TextField
                     label="Course"
+                    helperText="Type CRN to import course from Banner"
                     required
                     fullWidth
                     margin="dense"
@@ -287,7 +351,7 @@ class EditCourseDialog extends React.PureComponent {
   }
 }
 
-EditCourseDialog.propTypes = {
+SubscriptionDialog.propTypes = {
   classes: PropTypes.object.isRequired,
   fullScreen: PropTypes.bool,
   onClose: PropTypes.func,
@@ -298,4 +362,4 @@ EditCourseDialog.propTypes = {
 export default compose(
   withMobileDialog(),
   withStyles(styles)
-)(EditCourseDialog);
+)(SubscriptionDialog);

@@ -32,8 +32,7 @@ import {
 import makeSelectAuth from "containers/LoginPage/selectors";
 
 import ProgressButton from "components/ProgressButton";
-import AddCourseDialog from "components/AddCourseDialog";
-import EditCourseDialog from "components/EditCourseDialog";
+import SubscriptionDialog from "components/SubscriptionDialog";
 
 import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
@@ -200,13 +199,13 @@ class Subscriptions extends React.PureComponent {
           </ListItem>
         </List>
         {this.state.addSubscription && (
-          <AddCourseDialog
+          <SubscriptionDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleAddDialogClose}
           />
         )}
         {this.state.editSubscription != null && (
-          <EditCourseDialog
+          <SubscriptionDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleEditDialogClose}
             subscription={this.state.editSubscription}
