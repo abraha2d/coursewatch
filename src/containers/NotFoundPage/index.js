@@ -6,7 +6,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
 import { Typography } from "@material-ui/core";
 
@@ -23,12 +22,4 @@ NotFoundPage.propTypes = {
   location: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => {
-  let location = state.getIn(["router", "location"]).toJS();
-  if (location.location) {
-    location = location.location;
-  }
-  return { location };
-};
-
-export default connect(mapStateToProps)(NotFoundPage);
+export default NotFoundPage;
