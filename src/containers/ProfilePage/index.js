@@ -58,7 +58,7 @@ export class ProfilePage extends React.PureComponent {
     const { classes } = this.props;
     return (
       <div className={classes.container}>
-        <Typography variant="display1">Profile</Typography>
+        <Typography variant="title">Profile</Typography>
         <Avatar
           src={this.props.auth.user.picture}
           className={classes.centerAvatar}
