@@ -10,12 +10,17 @@ import { compose } from "redux";
 import axios from "axios";
 import Autosuggest from "react-autosuggest";
 
+import "react-select/dist/react-select.css";
+import "react-virtualized-select/styles.css";
+import Select from "react-virtualized-select";
+
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItem,
   ListItemSecondaryAction,
   ListItemText,
   MenuItem,
@@ -265,60 +270,52 @@ class SubscriptionDialog extends React.PureComponent {
                   </MenuItem>
                 ))}
             </TextField>
-            <Autosuggest
-              suggestions={this.state.suggestions}
-              onSuggestionsFetchRequested={({ value }) => {
-                const suggestions = this.getSuggestions(value);
-                this.setState({ suggestions });
-                if (
-                  suggestions.length === 0 &&
-                  value.length === 5 &&
-                  Number(value).toString() === value
-                ) {
-                  this.addCourse(value).then(() => {
-                    this.getCourses(this.state.term);
-                  });
-                }
-              }}
-              onSuggestionsClearRequested={() => {}}
-              getSuggestionValue={this.getCourseValue}
-              renderSuggestion={(course, { query, isHighlighted }) => (
-                <MenuItem selected={isHighlighted}>
-                  <ListItemText
-                    primary={this.getCourseValue(course)}
-                    secondary={course.title}
-                  />
-                  <ListItemSecondaryAction className={classes.secondaryActions}>
-                    <Button
-                      onClick={() =>
-                        window.open(
-                          `${
-                            course.term.college.url
-                          }/bwckschd.p_disp_detail_sched?term_in=${
-                            course.term.yyyymm
-                          }&crn_in=${course.crn}`
-                        )
-                      }
+            <Select
+              options={this.state.responses.courses}
+              optionHeight={86}
+              optionRenderer={({
+                focusedOption,
+                focusOption,
+                option,
+                selectValue,
+                style
+              }) => (
+                <div style={style}>
+                  <ListItem
+                    selected={option === focusedOption}
+                    onMouseOver={focusOption}
+                    onClick={selectValue}
+                  >
+                    <ListItemText
+                      primary={this.getCourseValue(option)}
+                      secondary={option.title}
+                    />
+                    <ListItemSecondaryAction
+                      className={classes.secondaryActions}
                     >
-                      <Typography variant="headline">
-                        {course.availability.remaining}/{
-                          course.availability.capacity
+                      <Button
+                        onClick={() =>
+                          window.open(
+                            `${
+                              option.term.college.url
+                            }/bwckschd.p_disp_detail_sched?term_in=${
+                              option.term.yyyymm
+                            }&crn_in=${option.crn}`
+                          )
                         }
-                      </Typography>
-                    </Button>
-                  </ListItemSecondaryAction>
-                </MenuItem>
+                      >
+                        <Typography variant="headline">
+                          {option.availability.remaining}/{
+                            option.availability.capacity
+                          }
+                        </Typography>
+                      </Button>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </div>
               )}
-              inputProps={{
-                value: this.state.course,
-                onChange: this.handleChange("course")
-              }}
-              onSuggestionSelected={(event, { suggestion }) => {
-                this.setState({ courseId: suggestion.id });
-              }}
-              alwaysRenderSuggestions
-              highlightFirstSuggestion
-              renderInputComponent={inputProps => {
+            />
+            {/*renderInputComponent={inputProps => {
                 const { value, onChange, ...rest } = inputProps;
                 return (
                   <TextField
@@ -334,8 +331,7 @@ class SubscriptionDialog extends React.PureComponent {
                     inputProps={rest}
                   />
                 );
-              }}
-            />
+              }}*/}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => this.props.onClose()} color="primary">
