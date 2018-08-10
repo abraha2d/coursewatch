@@ -12,6 +12,7 @@ import { compose } from "redux";
 import axios from "axios";
 
 import {
+  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -31,14 +32,13 @@ import {
 import makeSelectAuth from "containers/LoginPage/selectors";
 
 import ProgressButton from "components/ProgressButton";
-import AddCourseDialog from "components/AddCourseDialog";
-import EditCourseDialog from "components/EditCourseDialog";
+import SubscriptionDialog from "components/SubscriptionDialog";
 
 import injectReducer from "utils/injectReducer";
 import makeSelectSubscriptions from "./selectors";
 import reducer from "./reducer";
 
-const styles = () => ({
+const styles = theme => ({
   headerDiv: {
     display: "flex",
     alignItems: "center"
@@ -52,6 +52,9 @@ const styles = () => ({
   },
   errorText: {
     color: "#FFFFFF"
+  },
+  secondaryActions: {
+    display: "flex"
   }
 });
 
@@ -153,12 +156,31 @@ class Subscriptions extends React.PureComponent {
                 onClick={this.openEditDialog(subscription)}
               >
                 <ListItemText
-                  primary={subscription.course.title}
-                  secondary={`CRN: ${subscription.course.crn} (Term: ${
-                    subscription.course.term.name
-                  })`}
+                  primary={`${subscription.course.crn} - ${
+                    subscription.course.subject
+                  } ${subscription.course.number} ${
+                    subscription.course.section
+                  }`}
+                  secondary={subscription.course.title}
                 />
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction className={classes.secondaryActions}>
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        `${
+                          subscription.course.term.college.url
+                        }/bwckschd.p_disp_detail_sched?term_in=${
+                          subscription.course.term.yyyymm
+                        }&crn_in=${subscription.course.crn}`
+                      )
+                    }
+                  >
+                    <Typography component="a" variant="headline">
+                      {subscription.course.availability.remaining}/{
+                        subscription.course.availability.capacity
+                      }
+                    </Typography>
+                  </Button>
                   <ProgressButton
                     aria-label="Delete"
                     onClick={this.deleteSubscription(subscription.id)}
@@ -177,13 +199,13 @@ class Subscriptions extends React.PureComponent {
           </ListItem>
         </List>
         {this.state.addSubscription && (
-          <AddCourseDialog
+          <SubscriptionDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleAddDialogClose}
           />
         )}
         {this.state.editSubscription != null && (
-          <EditCourseDialog
+          <SubscriptionDialog
             apiAccessToken={this.props.auth.token}
             onClose={this.handleEditDialogClose}
             subscription={this.state.editSubscription}
