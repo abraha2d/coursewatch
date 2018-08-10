@@ -4,6 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
+import { ProfilePage } from "containers/ProfilePage";
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -182,6 +183,7 @@ class HomePage extends React.PureComponent {
           <div className={classes.toolbar} />
           <Switch>
             <Route exact path="/" component={Subscriptions} />
+            <Route exact path="/profile" component={ProfilePage} />
             <Route exact path="/settings" component={Settings} />
             <Route component={NotFoundPage} />
           </Switch>
