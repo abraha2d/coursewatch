@@ -8,6 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import { createStructuredSelector } from "reselect";
 import { Route, Switch } from "react-router-dom";
 import { push } from "connected-react-router/immutable";
 
@@ -33,9 +34,13 @@ import {
   Settings as SettingsIcon
 } from "@material-ui/icons";
 
+import makeSelectAuth from "containers/LoginPage/selectors";
+
 import Subscriptions from "containers/Subscriptions";
+import ProfilePage from "containers/ProfilePage";
 import Settings from "containers/Settings";
 import NotFoundPage from "containers/NotFoundPage";
+
 import LogoutButton from "containers/LoginPage/ConnectedLogoutButton";
 import UserListItem from "components/UserListItem";
 
@@ -182,6 +187,7 @@ class HomePage extends React.PureComponent {
           <div className={classes.toolbar} />
           <Switch>
             <Route exact path="/" component={Subscriptions} />
+            <Route exact path="/profile" component={ProfilePage} />
             <Route exact path="/settings" component={Settings} />
             <Route component={NotFoundPage} />
           </Switch>
@@ -198,14 +204,9 @@ HomePage.propTypes = {
   auth: PropTypes.object
 };
 
-const mapStateToProps = state => {
-  let location = state.getIn(["router", "location"]).toJS();
-  if (location.location) {
-    location = location.location;
-  }
-  const auth = state.get("auth").toJS();
-  return { location, auth };
-};
+const mapStateToProps = createStructuredSelector({
+  auth: makeSelectAuth()
+});
 
 const withConnect = connect(mapStateToProps);
 
