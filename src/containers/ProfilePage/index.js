@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { createStructuredSelector } from "reselect";
+import axios from "axios";
 
 import {
   Avatar,
@@ -19,6 +20,7 @@ import {
 } from "@material-ui/core";
 
 import makeSelectAuth from "containers/LoginPage/selectors";
+import { setUser } from "containers/LoginPage/actions";
 
 const styles = theme => ({
   container: {
@@ -42,16 +44,31 @@ const styles = theme => ({
 export class ProfilePage extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { ...props.auth.user };
+    this.state = { loading: false, error: null, user: props.auth.user };
   }
 
   handleChange = name => event => {
     const value = event.target.value;
-    this.setState({ [name]: value });
+    this.setState(prevState => ({
+      user: { ...prevState.user, [name]: value }
+    }));
   };
 
   handleSave = event => {
     event.preventDefault();
+    this.setState({ error: null, loading: true });
+    axios
+      .put(
+        "/api/users/me",
+        { ...this.state.user },
+        { headers: { Authorization: `Bearer ${this.props.auth.token}` } }
+      )
+      .then(response => {
+        this.setState({ loading: false });
+        localStorage.setItem("authUser", JSON.stringify(response.data));
+        this.props.dispatch(setUser(response.data));
+      })
+      .catch(error => this.setState({ loading: false, error }));
   };
 
   render() {
@@ -70,7 +87,7 @@ export class ProfilePage extends React.PureComponent {
               required
               fullWidth
               margin="dense"
-              value={this.state.name}
+              value={this.state.user.name}
               onChange={this.handleChange("name")}
             />
             <TextField
@@ -79,8 +96,16 @@ export class ProfilePage extends React.PureComponent {
               required
               fullWidth
               margin="dense"
-              value={this.state.email}
+              value={this.state.user.email}
               onChange={this.handleChange("email")}
+            />
+            <TextField
+              label="Phone"
+              type="tel"
+              fullWidth
+              margin="dense"
+              value={this.state.user.tel}
+              onChange={this.handleChange("tel")}
             />
           </div>
           <div className={classes.actions}>
@@ -95,6 +120,7 @@ export class ProfilePage extends React.PureComponent {
 }
 
 ProfilePage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
