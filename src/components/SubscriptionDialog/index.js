@@ -148,7 +148,6 @@ class SubscriptionDialog extends React.PureComponent {
           loading: false,
           responses: { ...prevState.responses, courses: response.data }
         }));
-        this.setState({ suggestions: this.getSuggestions(this.state.course) });
       })
       .catch(error => this.setState({ loading: false, error }));
   };
@@ -280,7 +279,9 @@ class SubscriptionDialog extends React.PureComponent {
                   });
                 }
               }}
-              onSuggestionsClearRequested={() => {}}
+              onSuggestionsClearRequested={() => {
+                this.setState({ suggestions: [] });
+              }}
               getSuggestionValue={this.getCourseValue}
               renderSuggestion={(course, { query, isHighlighted }) => (
                 <MenuItem selected={isHighlighted}>
