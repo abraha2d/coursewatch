@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/coursewatch.iml" filepath="$PROJECT_DIR$/.idea/coursewatch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../coursewatch-backend/.idea/coursewatch-backend.iml" filepath="$PROJECT_DIR$/../coursewatch-backend/.idea/coursewatch-backend.iml" />
     </modules>
   </component>
 </project>
