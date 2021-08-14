@@ -12,10 +12,12 @@ import Autosuggest from "react-autosuggest";
 
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   ListItemSecondaryAction,
   ListItemText,
   MenuItem,
@@ -49,6 +51,7 @@ class SubscriptionDialog extends React.PureComponent {
       term: subscription ? subscription.course.term.id : "",
       course: subscription ? this.getCourseValue(subscription.course) : "",
       courseId: subscription ? subscription.course.id : "",
+      watchForWaitlist: subscription ? subscription.watchForWaitlist : false,
       loading: false,
       responses: {
         colleges: null,
@@ -72,7 +75,12 @@ class SubscriptionDialog extends React.PureComponent {
   }
 
   handleChange = name => (event, nvm) => {
-    const value = nvm ? nvm.newValue : event.target.value;
+    const value =
+      name === "watchForWaitlist"
+        ? event.target.checked
+        : nvm
+          ? nvm.newValue
+          : event.target.value;
     this.setState(prevState => ({
       [name]: value,
       errors: {
@@ -187,13 +195,19 @@ class SubscriptionDialog extends React.PureComponent {
     if (this.props.subscription) {
       req = axios.put(
         `/api/subscriptions/${this.props.subscription.id}`,
-        { course: this.state.courseId },
+        {
+          course: this.state.courseId,
+          watchForWaitlist: this.state.watchForWaitlist
+        },
         { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
       );
     } else {
       req = axios.post(
         "/api/subscriptions",
-        { course: this.state.courseId },
+        {
+          course: this.state.courseId,
+          watchForWaitlist: this.state.watchForWaitlist
+        },
         { headers: { Authorization: `Bearer ${this.props.apiAccessToken}` } }
       );
     }
@@ -264,6 +278,15 @@ class SubscriptionDialog extends React.PureComponent {
                   </MenuItem>
                 ))}
             </TextField>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.watchForWaitlist}
+                  onChange={this.handleChange("watchForWaitlist")}
+                />
+              }
+              label="Watch for waitlist seats?"
+            />
             <Autosuggest
               suggestions={this.state.suggestions}
               onSuggestionsFetchRequested={({ value }) => {
@@ -302,8 +325,16 @@ class SubscriptionDialog extends React.PureComponent {
                       }
                     >
                       <Typography variant="headline">
-                        {course.availability.remaining}/{
-                          course.availability.capacity
+                        {
+                          (this.state.watchForWaitlist
+                            ? course.waitlistAvailability
+                            : course.availability
+                          ).remaining
+                        }/{
+                          (this.state.watchForWaitlist
+                            ? course.waitlistAvailability
+                            : course.availability
+                          ).capacity
                         }
                       </Typography>
                     </Button>

@@ -176,8 +176,16 @@ class Subscriptions extends React.PureComponent {
                     }
                   >
                     <Typography component="a" variant="headline">
-                      {subscription.course.availability.remaining}/{
-                        subscription.course.availability.capacity
+                      {
+                        (subscription.watchForWaitlist
+                          ? subscription.course.waitlistAvailability
+                          : subscription.course.availability
+                        ).remaining
+                      }/{
+                        (subscription.watchForWaitlist
+                          ? subscription.course.waitlistAvailability
+                          : subscription.course.availability
+                        ).capacity
                       }
                     </Typography>
                   </Button>
