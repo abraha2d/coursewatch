@@ -28,7 +28,7 @@
     "classnames": "^2.2.6",
     "connected-react-router": "^4.3.0",
     "history": "^4.7.2",
-    "immutable": "^3.8.2",
+    "immutable": "^4.3.8",
     "invariant": "^2.2.4",
     "lodash": "^4.17.23",
     "prop-types": "*",
